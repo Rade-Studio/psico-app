@@ -1,0 +1,23 @@
+<div fxLayoutAlign="center center" fxFlexFill class="main-div">
+    <mat-card fxFlex="25">
+
+        <mat-toolbar color="primary">
+            <span>Iniciar Sesion</span>
+        </mat-toolbar>
+
+        <form fxLayoutAlign="streth" fxLayout="column" class="login-form" [formGroup]="form" (ngSubmit)="logIn()">
+            <mat-form-field>
+                <mat-label>Correo Electronico</mat-label>
+                <input matInput placeholder="Correo Electronico" formControlName="email">
+                <mat-error *ngIf="isEmailValid as message">{{ message }}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Contraseña</mat-label>
+                <input matInput type="password" placeholder="Contraseña" formControlName="password">
+            </mat-form-field>
+
+            <button mat-raised-button color="accent">Iniciar Sesion</button>
+        </form>
+    </mat-card>
+</div>
