@@ -1,0 +1,20 @@
+<!-- Input para buscar por nombre a un estudiante y luego una lista de componentes de los estudiantes en cada card -->
+<div class="container" 
+    fxLayout 
+    fxLayout.xs="column"
+    fxLayoutAlign="center" 
+    fxLayoutGap="20px">
+    <mat-form-field class="input-search">
+        <mat-label>Buscar</mat-label>
+        <input matInput #message maxlength="256" placeholder="Nombre del estudiante.">
+        <mat-hint align="start"><strong>Ingrese el nombre del estudiante para filtar.</strong> </mat-hint>
+    </mat-form-field>
+    <!-- Boton para agregar nuevo con icono estudiante -->
+    <button mat-fab extended color="primary">
+        <mat-icon>add</mat-icon> Nuevo registro
+    </button>
+
+</div>
+
+<!-- Lista de estudiantes -->
+<attention-tracking-list></attention-tracking-list>

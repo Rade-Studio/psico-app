@@ -14,18 +14,27 @@ export const routes: Routes = [
         canActivate: [publicGuard],
         component: AuthComponent
     },
-    // {
-    //     path: 'estudiantes',
-    //     canActivate: [authGuard],
-    //     children: [
-    //         {
-    //             path: 'nuevo-estudiante',
-    //             loadComponent: () => import(),
-    //         },
-    //         {
-    //             path: 'editar-estudiante',
-    //             loadComponent: () => import()
-    //         }
-    //     ]
-    // }
+    // CRUD FICHA DE ATENCION Y SEGUIMIENTO
+    {
+        path: 'attention-tracking',
+        canActivate: [authGuard],
+        children: [
+            {
+                path: 'add',
+                loadComponent: () => import('./components/attention-tracking/attention-tracking-form/attention-tracking-form.component').then(m => m.AttentionTrackingFormComponent)
+            },
+            {
+                path: 'details/:id',
+                loadComponent: () => import('./components/attention-tracking/attention-tracking-details/attention-tracking-details.component').then(m => m.AttentionTrackingDetailsComponent)
+            },
+            {
+                path: 'new-tracking',
+                loadComponent: () => import('./components/tracking/tracking.component').then(m => m.TrackingComponent)
+            }
+        ]
+    },
+    {
+        path: '**',
+        redirectTo: ''
+    }
 ];

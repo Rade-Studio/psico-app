@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterOutlet } from '@angular/router';
 
 interface Item {
@@ -9,7 +10,11 @@ interface Item {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule],
+  imports: [
+    RouterOutlet, 
+    CommonModule,
+    MatToolbarModule,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

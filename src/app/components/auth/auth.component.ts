@@ -73,12 +73,13 @@ export class AuthComponent {
 
       try {
         await this.authService.loginWithEmailAndPassword(credential);
-        const snackBarRef = this.openSnackBar();
+        const snackBarRef = this.openSnackBar('Iniciaste session exitosamente ✅');
 
         snackBarRef.afterDismissed().subscribe(() => {
           this.router.navigateByUrl('/');
         })
       } catch (error) {
+        const snackBarRef = this.openSnackBar('Datos invalidos ❌')
         console.log(error);
       }
 
@@ -86,8 +87,8 @@ export class AuthComponent {
     }
   }
 
-  openSnackBar() {
-    return this._snackBar.open('Iniciaste session exitosamente 😊', 'Cerrar', {
+  openSnackBar(message: string) {
+    return this._snackBar.open(message, 'Cerrar', {
       duration: 2500,
       verticalPosition: 'top',
       horizontalPosition: 'end'
