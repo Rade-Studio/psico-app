@@ -17,6 +17,7 @@ import { Router, RouterLink } from '@angular/router';
 import { StudentRecord, StudentRecordForm } from '../../../core/models/student-record.model';
 import { authStateObs$ } from '../../../core/guards/auth.guard';
 import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 export interface CreateAttentionTrackingForm {
   apellidos: FormControl<string>;
@@ -60,6 +61,7 @@ export interface CreateAttentionTrackingForm {
     MatExpansionModule,
     MatCheckboxModule,
     MatTooltipModule,
+    MatSnackBarModule,
     MatTabsModule,
     FlexLayoutModule,
     RouterLink,
@@ -75,6 +77,8 @@ export class AttentionTrackingFormComponent {
   private _attentionTrackingService = inject(AttentionTrackingService);
 
   private _router = inject(Router);
+
+  private _snackBar = inject(MatSnackBar);
 
   private _attentionTrackingId = '';
 
@@ -192,10 +196,17 @@ export class AttentionTrackingFormComponent {
     try {
       if (!this._attentionTrackingId) {
         console.log('create');
-        await this.createAttentionTracking();
+        const doc = await this.createAttentionTracking();
+        const snackBarRef = this.openSnackBar('Registro creado exitosamente. ✅');
+
+        snackBarRef.afterDismissed().subscribe(() => {
+          this._router.navigate(['/attention-tracking/edit', doc.id]);
+        })
       } else {
         console.log('update');
         await this.updateAttentionTracking();
+        
+        this.openSnackBar('Registro actualizado exitosamente. ✅');
       }
     } catch (error) {
       console.error('Error creating attention tracking:', error);
@@ -214,6 +225,7 @@ export class AttentionTrackingFormComponent {
     attentionTracking.fechaActualizacion = new Date();
     attentionTracking.userId = this.userId;
     const doc = await this._attentionTrackingService.createAttentionTracking(attentionTracking);
+    return doc;
   }
 
   private async setFormValue(id: string) {
@@ -314,5 +326,13 @@ export class AttentionTrackingFormComponent {
     if (elemento) {
       elemento.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  }
+
+  openSnackBar(message: string) {
+    return this._snackBar.open(message, 'Cerrar', {
+      duration: 2500,
+      verticalPosition: 'top',
+      horizontalPosition: 'end'
+    })
   }
 }

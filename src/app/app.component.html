@@ -1,4 +1,10 @@
 <mat-toolbar color="primary">
     <button mat-button [routerLink]="['/']"><span>Registros de Psicoanalisis</span></button>
+    <span class="spacer"></span>
+    <ng-container *ngIf="isAuthenticated">
+        <button mat-icon-button aria-label="Example icon-button with heart icon" matTooltip="Cerrar Sesion" matTooltipPosition="left" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+        </button>
+    </ng-container>
 </mat-toolbar>
 <router-outlet></router-outlet>
