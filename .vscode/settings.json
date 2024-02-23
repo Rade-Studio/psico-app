@@ -2,6 +2,7 @@
     "conventionalCommits.scopes": [
         "login",
         "attention-tracking",
-        "ci"
+        "ci",
+        "tracking"
     ]
 }

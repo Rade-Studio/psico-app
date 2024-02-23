@@ -452,7 +452,7 @@
         <mat-tab label="Seguimientos" [disabled]="trackingTabIsDisabled">
 
           <div class="mat-elevation-z4">
-            Large content
+            <app-tracking [dataSource]="this.trackingList$"></app-tracking>
           </div>
 
         </mat-tab>

@@ -1,1 +1,68 @@
-<p>tracking works!</p>,
+<mat-card>
+    <mat-card-content>
+
+        <div class="button-container">
+            <button mat-raised-button class="button-control">
+              NUEVO SEGUIMIENTO
+            </button>
+          </div>
+
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-tracking">
+
+            <!-- 'fecha-registro', 'academicos', 'conductuales', 'emocionales', 'socio-familiar', 'motivo-atencion', 'evaluacion', 'acciones' -->
+            <!-- fehca-retiro Column -->
+            <ng-container matColumnDef="fecha-registro">
+              <th mat-header-cell *matHeaderCellDef> Fecha de registro </th>
+              <td mat-cell *matCellDef="let element"> {{element.fecahRegistro}} </td>
+            </ng-container>
+
+            <!-- academicos Column -->
+            <ng-container matColumnDef="academicos">
+              <th mat-header-cell *matHeaderCellDef> Academicos </th>
+              <td mat-cell *matCellDef="let element"> {{element.academicos}} </td>
+            </ng-container>
+
+            <!-- conductuales Column -->
+            <ng-container matColumnDef="conductuales">
+              <th mat-header-cell *matHeaderCellDef> Conductuales </th>
+              <td mat-cell *matCellDef="let element"> {{element.conductuales}} </td>
+            </ng-container>
+
+            <!-- emocionales Column -->
+            <ng-container matColumnDef="emocionales">
+              <th mat-header-cell *matHeaderCellDef> Emocionales </th>
+              <td mat-cell *matCellDef="let element"> {{element.emocionales}} </td>
+            </ng-container>
+
+            <!-- socio-familiar Column -->
+            <ng-container matColumnDef="socio-familiar">
+              <th mat-header-cell *matHeaderCellDef> Socio Familiar </th>
+              <td mat-cell *matCellDef="let element"> {{element.socioFamiliar}} </td>
+            </ng-container>
+
+            <!-- motivo-atencion Column -->
+            <ng-container matColumnDef="motivo-atencion">
+              <th mat-header-cell *matHeaderCellDef> Motivo de Atencion </th>
+              <td mat-cell *matCellDef="let element"> {{element.motivoAtencion}} </td>
+            </ng-container>
+
+            <!-- evaluacion Column -->
+            <ng-container matColumnDef="evaluacion">
+              <th mat-header-cell *matHeaderCellDef> Evaluacion </th>
+              <td mat-cell *matCellDef="let element"> {{element.evaluacion}} </td>
+            </ng-container>
+
+            <!-- acciones Column -->
+            <ng-container matColumnDef="acciones">
+                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-button>UNO</button>
+                    <button mat-button>DOS</button>
+                </td>
+            </ng-container>
+          
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+    </mat-card-content>
+</mat-card>

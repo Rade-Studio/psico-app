@@ -2,8 +2,10 @@ import { Injectable, inject } from '@angular/core';
 import { Firestore, addDoc, collection, collectionData, doc, getDoc, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { StudentRecord, StudentRecordForm } from '../models/student-record.model'
+import { Tracking, TrackingForm } from '../models/tracking.model';
 
 const PATH = 'attention-tracking';
+const TRACKINGPATH = 'tracking';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +57,28 @@ export class AttentionTrackingService {
       return snapshot.data() as StudentRecord;
     } catch (error) {
       console.error('Error getting document:', error);
+      return undefined;
+    }
+  }
+
+  getAllTracking(attentionTrackingId: string) {
+    const q = query(
+      collection(this._firestore, PATH, attentionTrackingId, TRACKINGPATH)
+    );
+
+    return collectionData(q, { idField: 'id' }) as Observable<Tracking[]>;
+  }
+
+  createTracking(attentionTrackingId: string, tracking: TrackingForm) {
+    return addDoc(collection(this._firestore, PATH, attentionTrackingId, TRACKINGPATH), tracking);
+  }
+
+  updateTracking(attentionTrackingId: string, trackingId: string, tracking: TrackingForm) {
+    try {
+      const document = doc(this._firestore, PATH, attentionTrackingId, TRACKINGPATH, trackingId);
+      return updateDoc(document, { ...tracking });
+    } catch (error) {
+      console.error('Error updating document:', error);
       return undefined;
     }
   }

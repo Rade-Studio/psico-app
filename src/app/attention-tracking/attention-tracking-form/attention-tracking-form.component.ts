@@ -18,6 +18,9 @@ import { StudentRecord, StudentRecordForm } from '../../core/models/student-reco
 import { authStateObs$ } from '../../core/guards/auth.guard';
 import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TrackingComponent } from '../tracking/tracking.component';
+import { TrackingForm } from '../../core/models/tracking.model';
+import { Observable } from 'rxjs';
 
 export interface CreateAttentionTrackingForm {
   apellidos: FormControl<string>;
@@ -65,6 +68,7 @@ export interface CreateAttentionTrackingForm {
     MatTabsModule,
     FlexLayoutModule,
     RouterLink,
+    TrackingComponent
   ],
   templateUrl: './attention-tracking-form.component.html',
   styleUrl: './attention-tracking-form.component.css',
@@ -81,6 +85,8 @@ export class AttentionTrackingFormComponent {
   private _snackBar = inject(MatSnackBar);
 
   private _attentionTrackingId = '';
+
+  trackingList$ = new Observable<TrackingForm[]>();
 
   panelOpenState = true;
 
@@ -103,7 +109,7 @@ export class AttentionTrackingFormComponent {
     sexo: this._formBuilder.control('', Validators.required),
     edad: this._formBuilder.control('', Validators.required),
     sisben: this._formBuilder.control(''),
-    fechaNacimiento: this._formBuilder.control(''),
+    fechaNacimiento: this._formBuilder.control(undefined),
     ciudadOrigen: this._formBuilder.control('', Validators.required),
     paisOrigen: this._formBuilder.control('', Validators.required),
     direccionResidencia: this._formBuilder.control(''),
@@ -232,6 +238,7 @@ export class AttentionTrackingFormComponent {
 
   private async setFormValue(id: string) {
     try {
+      this.trackingList$ = await this._attentionTrackingService.getAllTracking(id);
       const attentionTracking = await this._attentionTrackingService.getAttentionTrackingById(id);
       this.form.setValue({
         apellidos: attentionTracking.apellidos.toUpperCase(),

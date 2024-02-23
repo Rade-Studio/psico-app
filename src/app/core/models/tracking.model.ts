@@ -1,4 +1,8 @@
-export interface Tracking {
+export interface Tracking extends TrackingForm {
+    id: string;
+}
+
+export interface TrackingForm {
     acadamicos: string;
     conductuales: string;
     emocionales: string;
