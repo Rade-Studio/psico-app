@@ -1,5 +1,5 @@
 <div class="content">
-    <div fxLayout="row wrap" fxLayoutGap="16px grid">
+    <div fxLayout="row wrap" fxLayoutGap="10px grid">
         <div fxFlex="25%" 
         fxFlex.xs="100%"
         fxFlex.sm="33%" 
@@ -13,7 +13,7 @@
                     Ultima Cita: <p>{{ record.fechaActualizacion | date:'dd/MM/yyyy' }}</p>
                 </mat-card-content>
                 <mat-card-actions align="end">
-                    <button mat-icon-button color="primary">
+                    <button mat-icon-button color="primary" [routerLink]="['attention-tracking/edit/', record.id]">
                         <mat-icon>edit</mat-icon>
                     </button>
                     <button mat-icon-button color="warn">

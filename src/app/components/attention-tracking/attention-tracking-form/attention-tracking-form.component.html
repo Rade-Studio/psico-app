@@ -1,9 +1,27 @@
 <div class="container" fxLayout fxLayout="column" fxLayoutGap="20px">
 
-    <form [formGroup]="form">
+    <form [formGroup]="form" class="block-container">
+
+        <!-- Botonos de acceso rapido (ir a Informacion General) -->
+        <div class="accebility-buttons" fxLayout fxLayout="row wrap" 
+        fxLayoutAlign="center">
+            <button mat-fab color="primary" (click)="goTo(basicInformation)">
+                <mat-icon>person</mat-icon>
+            </button>
+            <button mat-fab color="primary" (click)="goTo(familyMember)">
+                <mat-icon>family_restroom</mat-icon>
+            </button>
+            <button mat-fab color="primary" (click)="goTo(personalityTraits)">
+                <mat-icon>list_alt</mat-icon>
+            </button>
+            <!-- <button mat-raised-button color="primary" (click)="goTo('caracteristicasAcademicas')">Caracteristicas Academicas</button>
+            <button mat-raised-button color="primary" (click)="goTo('caracteristicasFamiliares')">Caracteristicas Familiares</button>
+            <button mat-raised-button color="primary" (click)="goTo('caracteristicasSociales')">Caracteristicas Sociales</button>
+            <button mat-raised-button color="primary" (click)="goTo('caracteristicasSalud')">Caracteristicas de Salud</button> -->
+        </div>
 
         <!-- Informacion basica -->
-        <mat-accordion class="block-container">
+        <mat-accordion #basicInformation multi>
             <mat-expansion-panel [expanded]="true" (opened)="panelOpenState = false"
                                  (closed)="panelOpenState = true">
               <mat-expansion-panel-header>
@@ -62,6 +80,10 @@
                     <mat-label>Pais de Origen</mat-label>
                     <input matInput formControlName="paisOrigen" placeholder="Pais de Origen">
                 </mat-form-field>
+                <mat-form-field fxFlex="50%" fxFlex.xs="100%">
+                    <mat-label>EPS</mat-label>
+                    <input matInput formControlName="eps" placeholder="EPS">
+                </mat-form-field>
                 <mat-form-field fxFlex="25%" fxFlex.xs="100%">
                     <mat-label>Telefono</mat-label>
                     <input matInput formControlName="telefono" placeholder="Telefono">
@@ -75,15 +97,15 @@
                     <input matInput formControlName="correoElectronico" placeholder="Correo Electronico">
                 </mat-form-field>
                 <mat-form-field fxFlex="25%" fxFlex.xs="100%">
-                    <mat-label>EPS</mat-label>
-                    <input matInput formControlName="eps" placeholder="EPS">
+                    <mat-label>Sisben</mat-label>
+                    <input matInput formControlName="sisben" placeholder="Categoria Sisben">
                 </mat-form-field>
               </div>
             </mat-expansion-panel>
           </mat-accordion>
         
         <!-- Informacion de los padres y acudientes -->
-        <mat-accordion class="block-container">
+        <mat-accordion #familyMember>
             <mat-expansion-panel [expanded]="true" (opened)="panelOpenState = false"
                                  (closed)="panelOpenState = true">
               <mat-expansion-panel-header>
@@ -101,22 +123,25 @@
                         <mat-card-subtitle>Informacion del Padre</mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-content fxLayout fxLayout="row wrap" fxLayoutGap="20px grid">
-                        <mat-form-field fxFlex="25%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="20%" fxFlex.sm="50" fxFlex.xs="100%">
                             <mat-label>Nombres del Padre</mat-label>
                             <input matInput formControlName="nombre" placeholder="Nombres del Padre">
                         </mat-form-field>
-                        <mat-form-field fxFlex="25%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="20%" fxFlex.sm="50" fxFlex.xs="100%">
                             <mat-label>Documento del Padre</mat-label>
                             <input matInput formControlName="documento" placeholder="Documento del Padre">
                         </mat-form-field>
-                        <mat-form-field fxFlex="25%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="20%" fxFlex.sm="33" fxFlex.xs="100%">
                             <mat-label>Ocupacion del Padre</mat-label>
                             <input matInput formControlName="ocupacion" placeholder="Ocupacion del Padre">
                         </mat-form-field>
-                        <mat-form-field fxFlex="25%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="20%" fxFlex.sm="33" fxFlex.xs="100%">
                             <mat-label>Telefono del Padre</mat-label>
                             <input matInput formControlName="telefono" placeholder="Telefono del Padre">
                         </mat-form-field>
+                        <p fxFlex="20%" fxFlex.sm="33" fxFlex.xs="100%">
+                            <mat-checkbox formControlName="viveConEstudiante">¿Vive con el Padre?</mat-checkbox>
+                        </p>
                     </mat-card-content>
                 </mat-card>
 
@@ -126,22 +151,25 @@
                         <mat-card-subtitle>Informacion de la Madre</mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-content fxLayout fxLayout="row wrap" fxLayoutGap="20px grid">
-                        <mat-form-field fxFlex="25%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="20%" fxFlex.sm="50" fxFlex.xs="100%">
                             <mat-label>Nombres de la Madre</mat-label>
                             <input matInput formControlName="nombre" placeholder="Nombres de la Madre">
                         </mat-form-field>
-                        <mat-form-field fxFlex="25%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="20%" fxFlex.sm="50" fxFlex.xs="100%">
                             <mat-label>Documento de la Madre</mat-label>
                             <input matInput formControlName="documento" placeholder="Documento de la Madre">
                         </mat-form-field>
-                        <mat-form-field fxFlex="25%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="20%" fxFlex.sm="33" fxFlex.xs="100%">
                             <mat-label>Ocupacion de la Madre</mat-label>
                             <input matInput formControlName="ocupacion" placeholder="Ocupacion de la Madre">
                         </mat-form-field>
-                        <mat-form-field fxFlex="25%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="20%" fxFlex.sm="33" fxFlex.xs="100%">
                             <mat-label>Telefono de la Madre</mat-label>
                             <input matInput formControlName="telefono" placeholder="Telefono de la Madre">
                         </mat-form-field>
+                        <p fxFlex="20%" fxFlex.sm="33" fxFlex.xs="100%">
+                            <mat-checkbox formControlName="viveConEstudiante">¿Vive con la Madre?</mat-checkbox>
+                        </p>
                     </mat-card-content>
                 </mat-card>
 
@@ -153,23 +181,23 @@
                         </mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-content fxLayout fxLayout="row wrap" fxLayoutGap="20px grid">
-                        <mat-form-field fxFlex="25%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="20%" fxFlex.sm="50" fxFlex.xs="100%">
                             <mat-label>Nombres del Acudiente</mat-label>
                             <input matInput formControlName="nombre" placeholder="Nombres del Acudiente">
                         </mat-form-field>
-                        <mat-form-field fxFlex="25%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="20%" fxFlex.sm="50" fxFlex.xs="100%">
                             <mat-label>Ocupacion del Acudiente</mat-label>
                             <input matInput formControlName="ocupacion" placeholder="Ocupacion del Acudiente">
                         </mat-form-field>
-                        <mat-form-field fxFlex="25%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="20%" fxFlex.sm="33" fxFlex.xs="100%">
                             <mat-label>Lugar de trabajo del Acudiente</mat-label>
                             <input matInput formControlName="lugarTrabajo" placeholder="Lugar de trabajo del Acudiente">
                         </mat-form-field>
-                        <mat-form-field fxFlex="25%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="20%" fxFlex.sm="33" fxFlex.xs="100%">
                             <mat-label>Edad del Acudiente</mat-label>
                             <input matInput formControlName="edad" placeholder="Edad del Acudiente">
                         </mat-form-field>
-                        <mat-form-field fxFlex="25%" fxFlex.xs="100%">
+                        <mat-form-field fxFlex="20%" fxFlex.sm="33" fxFlex.xs="100%">
                             <mat-label>Parentesco del Acudiente</mat-label>
                             <input matInput formControlName="parentesco" placeholder="Parentesco del Acudiente">
                         </mat-form-field>
@@ -179,8 +207,9 @@
             </mat-expansion-panel>
           </mat-accordion>
           
-        <mat-accordion class="block-container">
-            <mat-expansion-panel (opened)="panelOpenState = true"
+        <!-- Características de personalidad -->
+        <mat-accordion #personalityTraits>
+            <mat-expansion-panel [expanded]="true" (opened)="panelOpenState = true"
                                  (closed)="panelOpenState = false">
               <mat-expansion-panel-header>
                 <mat-panel-title>
@@ -266,8 +295,25 @@
             </mat-expansion-panel>
         </mat-accordion>
           
-        <mat-accordion class="block-container">
-            <mat-expansion-panel (opened)="panelOpenState = true"
+        <mat-accordion #educationalFollowUp>
+            <mat-expansion-panel [expanded]="true" (opened)="panelOpenState = true"
+                                 (closed)="panelOpenState = false">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Características Academicas
+                </mat-panel-title>
+                <mat-panel-description>
+                    Caracteristicas Academicas son los rasgos dentro del estudio de un estudiante
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <div fxLayout fxLayout="row wrap" fxLayoutGap="20px grid">
+                
+              </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+          
+        <mat-accordion>
+            <mat-expansion-panel [expanded]="true" (opened)="panelOpenState = true"
                                  (closed)="panelOpenState = false">
               <mat-expansion-panel-header>
                 <mat-panel-title>

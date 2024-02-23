@@ -14,7 +14,8 @@ export interface StudentRecord {
     documento: string;
     grado: string;
     sexo: string;
-    edad: number;
+    edad: string;
+    sisben: string;
     fechaNacimiento: string;
     ciudadOrigen: string;
     paisOrigen: string;
@@ -24,14 +25,6 @@ export interface StudentRecord {
     estrato: string;
     correoElectronico: string;
     eps: string;
-    acudiente: Caretaker;
-    padre: FamilyMember;
-    madre: FamilyMember;
-    caracteristicasPersonalidad: PersonalityTraits;
-    estadoSalud: HealthStatus;
-    seguimientosEducativos: EducationalFollowUp;
-    seguimientoComportamental: BehavioralFollowUp;
-    seguimientoAtencion: Tracking[];
     fechaCreacion: Date;
     fechaActualizacion: Date;
   }

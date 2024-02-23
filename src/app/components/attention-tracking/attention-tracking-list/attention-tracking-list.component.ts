@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { AttentionTrackingService } from '../../../core/services/attention-tracking.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'attention-tracking-list',
@@ -17,6 +18,7 @@ import { AttentionTrackingService } from '../../../core/services/attention-track
     MatButtonModule,
     FlexLayoutModule,
     AsyncPipe,
+    RouterLink,
   ],
   templateUrl: './attention-tracking-list.component.html',
   styleUrl: './attention-tracking-list.component.css',

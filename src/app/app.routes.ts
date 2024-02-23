@@ -24,8 +24,8 @@ export const routes: Routes = [
                 loadComponent: () => import('./components/attention-tracking/attention-tracking-form/attention-tracking-form.component').then(m => m.AttentionTrackingFormComponent)
             },
             {
-                path: 'details/:id',
-                loadComponent: () => import('./components/attention-tracking/attention-tracking-details/attention-tracking-details.component').then(m => m.AttentionTrackingDetailsComponent)
+                path: 'edit/:id',
+                loadComponent: () => import('./components/attention-tracking/attention-tracking-form/attention-tracking-form.component').then(m => m.AttentionTrackingFormComponent)
             },
             {
                 path: 'new-tracking',
