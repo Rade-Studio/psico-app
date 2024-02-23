@@ -11,9 +11,9 @@ import { MatButtonModule } from "@angular/material/button"
 import { MatCardModule } from "@angular/material/card"
 import { MatToolbarModule } from "@angular/material/toolbar"
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar"
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../core/services/auth.service';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Credential } from '../../core/models/credential.model';
+import { Credential } from '../core/models/credential.model';
 import { Router } from '@angular/router';
 
 @Component({

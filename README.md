@@ -1,27 +1,39 @@
-# PsicoApp
+# 🚀 PSICO APP
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.0.
+¡Bienvenido a mi increíble proyecto! Este proyecto es una aplicación web desarrollada con Angular y Firebase que te permite llevar un seguimiento de atención y seguimiento de estudiantes.
 
-## Development server
+## ℹ️ Descripción
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Este proyecto es una herramienta diseñada para ayudar a los profesionales de la educación a realizar un seguimiento detallado del progreso, comportamiento y salud de los estudiantes. Proporciona una interfaz intuitiva para registrar y revisar datos importantes de cada estudiante, como información personal, características de personalidad, estado de salud, seguimiento educativo y comportamental, entre otros.
 
-## Code scaffolding
+## 🛠️ Tecnologías Utilizadas
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Angular
+- Firebase (Firestore, Authentication)
+- TypeScript
+- HTML
+- CSS
 
-## Build
+## 📋 Características
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- Registro de estudiantes con datos personales.
+- Seguimiento detallado de características de personalidad y comportamiento.
+- Registro de información de salud y medicamentos.
+- Seguimiento educativo y vocacional.
+- Autenticación de usuarios con Firebase.
 
-## Running unit tests
+## 📦 Instalación y Uso
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+1. Clona el repositorio: `git clone https://github.com/Rade-Studio/psico-app.git`
+2. Instala las dependencias: `npm install`
+3. Configura tus credenciales de Firebase en el archivo de configuración.
+4. Ejecuta el servidor de desarrollo: `ng serve`
+5. Abre tu navegador y accede a `http://localhost:4200`
 
-## Running end-to-end tests
+## 💡 Contribuir
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+¡Contribuciones son bienvenidas! Si tienes sugerencias, problemas o quieres agregar nuevas características, no dudes en abrir un issue o enviar un pull request.
 
-## Further help
+## 📄 Licencia
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Este proyecto está bajo la licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.

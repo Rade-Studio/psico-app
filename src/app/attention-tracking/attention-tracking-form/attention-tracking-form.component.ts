@@ -12,10 +12,10 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTabsModule} from '@angular/material/tabs';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { AttentionTrackingService } from '../../../core/services/attention-tracking.service';
+import { AttentionTrackingService } from '../../core/services/attention-tracking.service';
 import { Router, RouterLink } from '@angular/router';
-import { StudentRecord, StudentRecordForm } from '../../../core/models/student-record.model';
-import { authStateObs$ } from '../../../core/guards/auth.guard';
+import { StudentRecord, StudentRecordForm } from '../../core/models/student-record.model';
+import { authStateObs$ } from '../../core/guards/auth.guard';
 import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
@@ -27,7 +27,7 @@ export interface CreateAttentionTrackingForm {
   sexo: FormControl<string>;
   edad: FormControl<string>;
   sisben?: FormControl<string | undefined>;
-  fechaNacimiento?: FormControl<string | undefined>;
+  fechaNacimiento?: FormControl<Date | undefined>;
   ciudadOrigen: FormControl<string>;
   paisOrigen: FormControl<string>;
   direccionResidencia?: FormControl<string | undefined>;
@@ -195,7 +195,6 @@ export class AttentionTrackingFormComponent {
 
     try {
       if (!this._attentionTrackingId) {
-        console.log('create');
         const doc = await this.createAttentionTracking();
         const snackBarRef = this.openSnackBar('Registro creado exitosamente. ✅');
 
@@ -203,7 +202,6 @@ export class AttentionTrackingFormComponent {
           this._router.navigate(['/attention-tracking/edit', doc.id]);
         })
       } else {
-        console.log('update');
         await this.updateAttentionTracking();
         
         this.openSnackBar('Registro actualizado exitosamente. ✅');
@@ -215,12 +213,16 @@ export class AttentionTrackingFormComponent {
 
   async updateAttentionTracking() {
     const attentionTracking = this.form.value as StudentRecordForm;
+    attentionTracking.nombres = attentionTracking.nombres.toLowerCase()
+    attentionTracking.apellidos = attentionTracking.apellidos.toLowerCase()
     attentionTracking.fechaActualizacion = new Date();
     const doc = await this._attentionTrackingService.updateAttentionTracking(this._attentionTrackingId, attentionTracking);
   }
 
   async createAttentionTracking() {
     const attentionTracking = this.form.value as StudentRecordForm;
+    attentionTracking.nombres = attentionTracking.nombres.toLowerCase()
+    attentionTracking.apellidos = attentionTracking.apellidos.toLowerCase()
     attentionTracking.fechaCreacion = new Date();
     attentionTracking.fechaActualizacion = new Date();
     attentionTracking.userId = this.userId;
@@ -232,14 +234,14 @@ export class AttentionTrackingFormComponent {
     try {
       const attentionTracking = await this._attentionTrackingService.getAttentionTrackingById(id);
       this.form.setValue({
-        apellidos: attentionTracking.apellidos,
-        nombres: attentionTracking.nombres,
+        apellidos: attentionTracking.apellidos.toUpperCase(),
+        nombres: attentionTracking.nombres.toUpperCase(),
         documento: attentionTracking.documento || '',
         grado: attentionTracking.grado || '',
         sexo: attentionTracking.sexo || '',
         edad: attentionTracking.edad || '',
         sisben: attentionTracking.sisben || '',
-        fechaNacimiento: attentionTracking.fechaNacimiento || '',
+        fechaNacimiento: new Date(attentionTracking.fechaNacimiento) || undefined,
         ciudadOrigen: attentionTracking.ciudadOrigen || '',
         paisOrigen: attentionTracking.paisOrigen || '',
         direccionResidencia: attentionTracking.direccionResidencia || '',

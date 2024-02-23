@@ -17,7 +17,7 @@ export interface StudentRecordForm {
     sexo: string;
     edad: string;
     sisben: string;
-    fechaNacimiento: string;
+    fechaNacimiento: Date;
     ciudadOrigen: string;
     paisOrigen: string;
     direccionResidencia: string;

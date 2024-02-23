@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { AuthComponent } from './components/auth/auth.component';
+import { AuthComponent } from './auth/auth.component';
 import { authGuard, publicGuard } from './core/guards/auth.guard';
-import { HomeComponent } from './components/home/home.component';
+import { HomeComponent } from './home/home.component';
 
 export const routes: Routes = [
     {
@@ -21,15 +21,15 @@ export const routes: Routes = [
         children: [
             {
                 path: 'add',
-                loadComponent: () => import('./components/attention-tracking/attention-tracking-form/attention-tracking-form.component').then(m => m.AttentionTrackingFormComponent)
+                loadComponent: () => import('./attention-tracking/attention-tracking-form/attention-tracking-form.component').then(m => m.AttentionTrackingFormComponent)
             },
             {
                 path: 'edit/:id',
-                loadComponent: () => import('./components/attention-tracking/attention-tracking-form/attention-tracking-form.component').then(m => m.AttentionTrackingFormComponent)
+                loadComponent: () => import('./attention-tracking/attention-tracking-form/attention-tracking-form.component').then(m => m.AttentionTrackingFormComponent)
             },
             {
                 path: 'new-tracking',
-                loadComponent: () => import('./components/attention-tracking/tracking/tracking.component').then(m => m.TrackingComponent)
+                loadComponent: () => import('./attention-tracking/tracking/tracking.component').then(m => m.TrackingComponent)
             }
         ]
     },

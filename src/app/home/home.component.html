@@ -1,0 +1,4 @@
+<!-- Input para buscar por nombre a un estudiante y luego una lista de componentes de los estudiantes en cada card -->
+<app-search-bar (changeQuery)="searchByQuery($event)"></app-search-bar>
+<!-- Lista de estudiantes -->
+<attention-tracking-list [attentionTracking$]="attentionTracking$"></attention-tracking-list>
