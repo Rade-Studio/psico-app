@@ -29,7 +29,7 @@ export const routes: Routes = [
             },
             {
                 path: 'new-tracking',
-                loadComponent: () => import('./components/tracking/tracking.component').then(m => m.TrackingComponent)
+                loadComponent: () => import('./components/attention-tracking/tracking/tracking.component').then(m => m.TrackingComponent)
             }
         ]
     },
