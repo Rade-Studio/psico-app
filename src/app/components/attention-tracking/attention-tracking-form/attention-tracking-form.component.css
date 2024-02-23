@@ -13,3 +13,8 @@
 .accebility-buttons > button {
   margin: 16px 5px;
 }
+
+.header-accordion  .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}

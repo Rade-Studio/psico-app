@@ -4,11 +4,12 @@ import { EducationalFollowUp } from "./educational-follow-up.model";
 import { FamilyMember } from "./family-member.model";
 import { HealthStatus } from "./health-status.model";
 import { PersonalityTraits } from "./personality-traits.model";
-import { Tracking } from "./tracking.model";
 
+export interface StudentRecord extends StudentRecordForm {
+  id: string;
+}
 
-export interface StudentRecord {
-    id: string;
+export interface StudentRecordForm {
     apellidos: string;
     nombres: string;
     documento: string;
@@ -27,4 +28,12 @@ export interface StudentRecord {
     eps: string;
     fechaCreacion: Date;
     fechaActualizacion: Date;
+    userId: string;
+    acudiente: Caretaker;
+    padre: FamilyMember;
+    madre: FamilyMember;
+    caracteristicasPersonalidad: PersonalityTraits;
+    estadoSalud: HealthStatus;
+    seguimientoEducativos: EducationalFollowUp;
+    seguimientoComportamental: BehavioralFollowUp;
   }

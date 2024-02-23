@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AttentionTrackingListComponent } from '../attention-tracking/attention-tracking-list/attention-tracking-list.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -22,6 +23,7 @@ import { AttentionTrackingListComponent } from '../attention-tracking/attention-
     ReactiveFormsModule,
     FormsModule,
     FlexLayoutModule,
+    RouterLink,
     AttentionTrackingListComponent
   ],
   templateUrl: './home.component.html',

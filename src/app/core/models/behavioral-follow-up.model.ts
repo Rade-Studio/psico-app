@@ -1,10 +1,11 @@
 export interface BehavioralFollowUp {
     tratoAfectuoso: boolean;
-    comunicacion: boolean;
+    puntualidad: boolean;
     participacion: boolean;
     asertividad: boolean;
     tolerancia: boolean;
     respeto: boolean;
+    presentacionPersonal: boolean;
     empatia: boolean;
     colaboracion: boolean;
     

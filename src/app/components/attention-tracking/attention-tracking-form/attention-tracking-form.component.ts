@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Tracking } from '../../../core/models/tracking.model';
-import { Caretaker } from '../../../core/models/caretaker.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,10 +8,15 @@ import { MatIconModule } from '@angular/material/icon';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatTabsModule} from '@angular/material/tabs';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AttentionTrackingService } from '../../../core/services/attention-tracking.service';
 import { Router, RouterLink } from '@angular/router';
+import { StudentRecord, StudentRecordForm } from '../../../core/models/student-record.model';
+import { authStateObs$ } from '../../../core/guards/auth.guard';
+import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
 
 export interface CreateAttentionTrackingForm {
   apellidos: FormControl<string>;
@@ -56,6 +59,8 @@ export interface CreateAttentionTrackingForm {
     MatDatepickerModule,
     MatExpansionModule,
     MatCheckboxModule,
+    MatTooltipModule,
+    MatTabsModule,
     FlexLayoutModule,
     RouterLink,
   ],
@@ -75,9 +80,15 @@ export class AttentionTrackingFormComponent {
 
   panelOpenState = true;
 
+  trackingTabIsDisabled = true;
+
+  userId = "";
+
   @Input() set id(value: string) {
-    this._attentionTrackingId = value;
-    this.setFormValue(this._attentionTrackingId);
+    if (value) {
+      this._attentionTrackingId = value;
+      this.setFormValue(value);
+    }
   }
 
   form = this._formBuilder.group<CreateAttentionTrackingForm>({
@@ -154,11 +165,12 @@ export class AttentionTrackingFormComponent {
     }),
     seguimientoComportamental: this._formBuilder.group({
       tratoAfectuoso: new FormControl(false),
-      comunicacion: new FormControl(false),
+      puntualidad: new FormControl(false),
       participacion: new FormControl(false),
       asertividad: new FormControl(false),
       tolerancia: new FormControl(false),
       respeto: new FormControl(false),
+      presentacionPersonal: new FormControl(false),
       empatia: new FormControl(false),
       colaboracion: new FormControl(false),
       problemasResueltos: new FormControl(''),
@@ -166,7 +178,42 @@ export class AttentionTrackingFormComponent {
   });
 
   constructor() { 
-    console.log(this.form);
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.userId = user.uid;
+      }
+    });
+  }
+
+  async createOrUpdateAttentionTracking() {
+    if (this.form.invalid) return;
+
+    try {
+      if (!this._attentionTrackingId) {
+        console.log('create');
+        await this.createAttentionTracking();
+      } else {
+        console.log('update');
+        await this.updateAttentionTracking();
+      }
+    } catch (error) {
+      console.error('Error creating attention tracking:', error);
+    }
+  }
+
+  async updateAttentionTracking() {
+    const attentionTracking = this.form.value as StudentRecordForm;
+    attentionTracking.fechaActualizacion = new Date();
+    const doc = await this._attentionTrackingService.updateAttentionTracking(this._attentionTrackingId, attentionTracking);
+  }
+
+  async createAttentionTracking() {
+    const attentionTracking = this.form.value as StudentRecordForm;
+    attentionTracking.fechaCreacion = new Date();
+    attentionTracking.fechaActualizacion = new Date();
+    attentionTracking.userId = this.userId;
+    const doc = await this._attentionTrackingService.createAttentionTracking(attentionTracking);
   }
 
   private async setFormValue(id: string) {
@@ -190,72 +237,74 @@ export class AttentionTrackingFormComponent {
         correoElectronico: attentionTracking.correoElectronico || '',
         eps: attentionTracking.eps || '',
         acudiente: {
-          nombre: '',
-          ocupacion: '',
-          lugarTrabajo: '',
-          edad: '',
-          parentesco: ''
+          nombre: attentionTracking.acudiente.nombre || '',
+          ocupacion: attentionTracking.acudiente.ocupacion || '',
+          lugarTrabajo: attentionTracking.acudiente.lugarTrabajo || '',
+          edad: attentionTracking.acudiente.edad || '',
+          parentesco: attentionTracking.acudiente.parentesco || ''
         },
         padre: {
-          nombre: '',
-          documento: '',
-          ocupacion: '',
-          telefono: '',
-          viveConEstudiante: false,
+          nombre: attentionTracking.padre.nombre || '',
+          documento: attentionTracking.padre.documento || '',
+          ocupacion: attentionTracking.padre.ocupacion || '',
+          telefono: attentionTracking.padre.telefono || '',
+          viveConEstudiante: attentionTracking.padre.viveConEstudiante || false,
         },
         madre: {
-          nombre: '',
-          documento: '',
-          ocupacion: '',
-          telefono: '',
-          viveConEstudiante: false,
+          nombre: attentionTracking.madre.nombre || '',
+          documento: attentionTracking.madre.documento || '',
+          ocupacion: attentionTracking.madre.ocupacion || '',
+          telefono: attentionTracking.madre.telefono || '',
+          viveConEstudiante: attentionTracking.madre.viveConEstudiante || false,
         },
         caracteristicasPersonalidad: {
-          gradoActividad: '',
-          sentidoRespeto: '',
-          gradoTolerancia: '',
-          gradoSociabilidad: '',
-          gradoEmotividad: '',
-          principioAutoridad: '',
-          aceptacionErrores: '',
-          manejoAgresion: '',
-          sentidoResponsabilidad: '',
-          aceptacionOrientacion: '',
-          sentidoPertenencia: '',
-          aceptacionGrupal: '',
-          nivelExtroversion: '',
-          gradoColaboracion: '',
+          gradoActividad: attentionTracking.caracteristicasPersonalidad.gradoActividad || '',
+          sentidoRespeto: attentionTracking.caracteristicasPersonalidad.sentidoRespeto || '',
+          gradoTolerancia: attentionTracking.caracteristicasPersonalidad.gradoTolerancia || '',
+          gradoSociabilidad: attentionTracking.caracteristicasPersonalidad.gradoSociabilidad || '',
+          gradoEmotividad: attentionTracking.caracteristicasPersonalidad.gradoEmotividad || '',
+          principioAutoridad: attentionTracking.caracteristicasPersonalidad.principioAutoridad || '',
+          aceptacionErrores: attentionTracking.caracteristicasPersonalidad.aceptacionErrores || '',
+          manejoAgresion: attentionTracking.caracteristicasPersonalidad.manejoAgresion || '',
+          sentidoResponsabilidad: attentionTracking.caracteristicasPersonalidad.sentidoResponsabilidad || '',
+          aceptacionOrientacion: attentionTracking.caracteristicasPersonalidad.aceptacionOrientacion || '',
+          sentidoPertenencia: attentionTracking.caracteristicasPersonalidad.sentidoPertenencia || '',
+          aceptacionGrupal: attentionTracking.caracteristicasPersonalidad.aceptacionGrupal || '',
+          nivelExtroversion: attentionTracking.caracteristicasPersonalidad.nivelExtroversion || '',
+          gradoColaboracion: attentionTracking.caracteristicasPersonalidad.gradoColaboracion || '',
         },
         estadoSalud: {
-          desmayos: false,
-          insomnio: false,
-          convulsiones: false,
-          nerviosismo: false,
-          alergias: false,
-          gripasFrecuentes: false,
-          otitis: false,
-          colicos: false,
-          cefaleas: false,
-          asma: false,
-          medicamentos: '',
+          desmayos: attentionTracking.estadoSalud.desmayos || false,
+          insomnio: attentionTracking.estadoSalud.insomnio || false,
+          convulsiones: attentionTracking.estadoSalud.convulsiones || false,
+          nerviosismo: attentionTracking.estadoSalud.nerviosismo || false,
+          alergias: attentionTracking.estadoSalud.alergias || false,
+          gripasFrecuentes: attentionTracking.estadoSalud.gripasFrecuentes || false,
+          otitis: attentionTracking.estadoSalud.otitis || false,
+          colicos: attentionTracking.estadoSalud.colicos || false,
+          cefaleas: attentionTracking.estadoSalud.cefaleas || false,
+          asma: attentionTracking.estadoSalud.asma || false,
+          medicamentos: attentionTracking.estadoSalud.medicamentos || '',
         },
         seguimientoEducativos: {
-          areasPreferencias: '',
-          areasNoPreferidas: '',
-          preferenciasVocacionales: '',
+          areasPreferencias: attentionTracking.seguimientoEducativos.areasPreferencias || '',
+          areasNoPreferidas: attentionTracking.seguimientoEducativos.areasNoPreferidas || '',
+          preferenciasVocacionales: attentionTracking.seguimientoEducativos.preferenciasVocacionales || '',
         },
         seguimientoComportamental: {
-          tratoAfectuoso: false,
-          comunicacion: false,
-          participacion: false,
-          asertividad: false,
-          tolerancia: false,
-          respeto: false,
-          empatia: false,
-          colaboracion: false,
-          problemasResueltos: '',
+          tratoAfectuoso: attentionTracking.seguimientoComportamental.tratoAfectuoso || false,
+          puntualidad: attentionTracking.seguimientoComportamental.puntualidad || false,
+          participacion: attentionTracking.seguimientoComportamental.participacion || false,
+          asertividad: attentionTracking.seguimientoComportamental.asertividad || false,
+          tolerancia: attentionTracking.seguimientoComportamental.tolerancia || false,
+          respeto: attentionTracking.seguimientoComportamental.respeto || false,
+          presentacionPersonal: attentionTracking.seguimientoComportamental.presentacionPersonal || false,
+          empatia: attentionTracking.seguimientoComportamental.empatia || false,
+          colaboracion: attentionTracking.seguimientoComportamental.colaboracion || false,
+          problemasResueltos: attentionTracking.seguimientoComportamental.problemasResueltos || '',
         }
       })
+      this.trackingTabIsDisabled = false;
     } catch (error) {
       console.error('Error getting attention tracking:', error);
     }

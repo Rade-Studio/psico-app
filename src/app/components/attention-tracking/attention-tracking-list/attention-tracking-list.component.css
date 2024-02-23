@@ -6,3 +6,7 @@
 .content > mat-card {
   width: 200px;
 }
+
+.student-card {
+  background-color: #f5f5f5;
+}
