@@ -17,24 +17,28 @@ export class AttentionTrackingService {
   private _collection = collection(this._firestore, PATH);
 
   searchByQuery(name: string, userId: string) {
+    const searchTokens = this.generateSearchTokens(name);
     const q = query(
       this._collection, 
       where('userId', '==', userId),
-      where('nombres', '>=', name), 
-      where('nombres', '<=', name + '\uf8ff'),
+      where('reverseSearchTokens', 'array-contains-any', searchTokens)
     );
+
+    console.log(q);
     
     return collectionData(q, { idField: 'id' }) as Observable<StudentRecord[]>;
   }
 
   createAttentionTracking(attentionTracking: 
     StudentRecordForm) {
-    return addDoc(this._collection, attentionTracking);
+      attentionTracking.reverseSearchTokens = this.generateReverseSearchTokens(attentionTracking.nombres);
+      return addDoc(this._collection, attentionTracking);
   }
 
   updateAttentionTracking(id: string, studentRecord: StudentRecordForm) {
     try {
       const document = doc(this._firestore, PATH, id);
+      studentRecord.reverseSearchTokens = this.generateReverseSearchTokens(studentRecord.nombres);
       return updateDoc(document, { ...studentRecord });
     } catch (error) {
       console.error('Error updating document:', error);
@@ -69,6 +73,18 @@ export class AttentionTrackingService {
     return collectionData(q, { idField: 'id' }) as Observable<Tracking[]>;
   }
 
+  async getTrackingById(attentionTrackingId: string, trackingId: string) {
+    try {
+      const document = doc(this._firestore, PATH, attentionTrackingId, TRACKINGPATH, trackingId);
+      var snapshot = await getDoc(document);
+
+      return snapshot.data() as Tracking;
+    } catch (error) {
+      console.error('Error getting document:', error);
+      return undefined;
+    }
+  }
+
   createTracking(attentionTrackingId: string, tracking: TrackingForm) {
     return addDoc(collection(this._firestore, PATH, attentionTrackingId, TRACKINGPATH), tracking);
   }
@@ -81,6 +97,35 @@ export class AttentionTrackingService {
       console.error('Error updating document:', error);
       return undefined;
     }
+  }
+
+  private generateReverseSearchTokens(texto: string): string[] {
+    const words = texto.toLowerCase().split(' ');
+    const tokens: string[] = [];
+
+    words.forEach(palabra => {
+      tokens.push(palabra);
+    });
+
+    for (let i = 0; i < words.length; i++) {
+      const token = words.slice(i).join(' ');
+      tokens.push(token);
+    }
+    return tokens;
+  }
+
+  private generateSearchTokens(searchText: string): string[] {
+    // Separar el texto de búsqueda en palabras
+    const words = searchText.toLowerCase().split(' ');
+    
+    // Generar tokens de búsqueda inversa
+    const searchTokens: string[] = [];
+    for (let i = 0; i < words.length; i++) {
+      const token = words.slice(i).join(' ');
+      searchTokens.push(token);
+    }
+    
+    return searchTokens;
   }
 
 }

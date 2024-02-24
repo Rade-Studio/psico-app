@@ -54,7 +54,6 @@ export class HomeComponent {
   };
 
   async searchByQuery(name: string) {
-    console.log('searchByQuery', name);
     const auth = getAuth();
     let userId = "";
     await onAuthStateChanged(auth, async (user) => {
@@ -62,6 +61,11 @@ export class HomeComponent {
         userId = user.uid;
       }
     });
+
+    if (!name) {
+      this.attentionTracking$ = this._attentionTrackingService.getAllAttentionTracking(userId);
+      return;
+    }
 
     try {
       this.attentionTracking$ = this._attentionTrackingService.searchByQuery(name, userId);

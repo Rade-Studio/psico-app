@@ -2,15 +2,13 @@
     <mat-card-content>
 
         <div class="button-container">
-            <button mat-raised-button class="button-control">
+            <button mat-raised-button class="button-control" (click)="openTrackingDialog(undefined)">
               NUEVO SEGUIMIENTO
             </button>
           </div>
 
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-tracking">
+        <mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-tracking">
 
-            <!-- 'fecha-registro', 'academicos', 'conductuales', 'emocionales', 'socio-familiar', 'motivo-atencion', 'evaluacion', 'acciones' -->
-            <!-- fehca-retiro Column -->
             <ng-container matColumnDef="fecha-registro">
               <th mat-header-cell *matHeaderCellDef> Fecha de registro </th>
               <td mat-cell *matCellDef="let element"> {{element.fecahRegistro}} </td>
@@ -53,16 +51,23 @@
             </ng-container>
 
             <!-- acciones Column -->
-            <ng-container matColumnDef="acciones">
+            <ng-container matColumnDef="acciones" stickyEnd>
                 <th mat-header-cell *matHeaderCellDef> Acciones </th>
                 <td mat-cell *matCellDef="let element">
-                    <button mat-button>UNO</button>
-                    <button mat-button>DOS</button>
+                    <button mat-button color="primary">
+                        <mat-icon>visibility</mat-icon>
+                    </button>
+                    <button mat-button color="accent">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-button color="warn">
+                        <mat-icon>delete</mat-icon>
+                    </button>
                 </td>
             </ng-container>
           
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
+          </mat-table>
     </mat-card-content>
 </mat-card>

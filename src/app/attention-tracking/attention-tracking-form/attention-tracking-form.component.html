@@ -43,13 +43,9 @@
                         </mat-panel-description>
                       </mat-expansion-panel-header>
                       <div fxLayout fxLayout="row wrap" fxLayoutGap="20px grid">
-                        <mat-form-field fxFlex="25%" fxFlex.xs="100%">
-                            <mat-label>Apellidos</mat-label>
-                            <input matInput formControlName="apellidos" placeholder="Apellidos">
-                        </mat-form-field>
-                        <mat-form-field fxFlex="25%" fxFlex.xs="100%">
-                            <mat-label>Nombres</mat-label>
-                            <input matInput formControlName="nombres" placeholder="Nombres">
+                        <mat-form-field fxFlex="50%" fxFlex.xs="100%">
+                            <mat-label>Nombre Completo</mat-label>
+                            <input matInput formControlName="nombres" placeholder="Nombre y Apellido del estudiante.">
                         </mat-form-field>
                         <mat-form-field fxFlex="25%" fxFlex.xs="100%">
                             <mat-label>Documento</mat-label>
@@ -64,15 +60,15 @@
                             <input matInput formControlName="sexo" placeholder="Sexo">
                         </mat-form-field>
                         <mat-form-field fxFlex="25%" fxFlex.xs="100%">
-                            <mat-label>Edad</mat-label>
-                            <input matInput formControlName="edad" placeholder="Edad">
+                            <mat-label>Fecha de Nacimiento</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="fechaNacimiento" (click)="picker.open()" (dateChange)="this.calcAge($event)">
+                            <mat-hint>DD/MM/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker" [disabled]="false"></mat-datepicker-toggle>
+                            <mat-datepicker #picker [disabled]="false"></mat-datepicker>
                         </mat-form-field>
                         <mat-form-field fxFlex="25%" fxFlex.xs="100%">
-                            <mat-label>Fecha de Nacimiento</mat-label>
-                            <input matInput [matDatepicker]="picker" formControlName="fechaNacimiento">
-                            <mat-hint>MM/DD/YYYY</mat-hint>
-                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
+                            <mat-label>Edad</mat-label>
+                            <input matInput formControlName="edad" placeholder="Edad">
                         </mat-form-field>
                         <mat-form-field fxFlex="25%" fxFlex.xs="100%">
                             <mat-label>Barrio</mat-label>
@@ -136,7 +132,7 @@
                             <mat-card-content fxLayout fxLayout="row wrap" fxLayoutGap="20px grid">
                                 <mat-form-field fxFlex="20%" fxFlex.sm="50" fxFlex.xs="100%">
                                     <mat-label>Nombres del Padre</mat-label>
-                                    <input matInput formControlName="nombre" placeholder="Nombres del Padre">
+                                    <input matInput formControlName="nombre" placeholder="Nombres y Apellidos">
                                 </mat-form-field>
                                 <mat-form-field fxFlex="20%" fxFlex.sm="50" fxFlex.xs="100%">
                                     <mat-label>Documento del Padre</mat-label>
@@ -164,7 +160,7 @@
                             <mat-card-content fxLayout fxLayout="row wrap" fxLayoutGap="20px grid">
                                 <mat-form-field fxFlex="20%" fxFlex.sm="50" fxFlex.xs="100%">
                                     <mat-label>Nombres de la Madre</mat-label>
-                                    <input matInput formControlName="nombre" placeholder="Nombres de la Madre">
+                                    <input matInput formControlName="nombre" placeholder="Nombres y Apellidos">
                                 </mat-form-field>
                                 <mat-form-field fxFlex="20%" fxFlex.sm="50" fxFlex.xs="100%">
                                     <mat-label>Documento de la Madre</mat-label>
@@ -194,7 +190,7 @@
                             <mat-card-content fxLayout fxLayout="row wrap" fxLayoutGap="20px grid">
                                 <mat-form-field fxFlex="20%" fxFlex.sm="50" fxFlex.xs="100%">
                                     <mat-label>Nombres del Acudiente</mat-label>
-                                    <input matInput formControlName="nombre" placeholder="Nombres del Acudiente">
+                                    <input matInput formControlName="nombre" placeholder="Nombres y Apellidos">
                                 </mat-form-field>
                                 <mat-form-field fxFlex="20%" fxFlex.sm="50" fxFlex.xs="100%">
                                     <mat-label>Ocupacion del Acudiente</mat-label>

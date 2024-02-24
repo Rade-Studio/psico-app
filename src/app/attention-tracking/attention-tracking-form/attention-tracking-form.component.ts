@@ -10,7 +10,9 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTabsModule} from '@angular/material/tabs';
-import {provideNativeDateAdapter} from '@angular/material/core';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, provideNativeDateAdapter} from '@angular/material/core';
+import { DateFnsAdapter, DateFnsModule } from "@angular/material-date-fns-adapter";
+import { es } from "date-fns/locale";
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AttentionTrackingService } from '../../core/services/attention-tracking.service';
 import { Router, RouterLink } from '@angular/router';
@@ -21,16 +23,17 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TrackingComponent } from '../tracking/tracking.component';
 import { TrackingForm } from '../../core/models/tracking.model';
 import { Observable } from 'rxjs';
+import { DataMutatatorService } from '../../core/services/data-mutatator.service';
+import { Timestamp } from '@angular/fire/firestore';
 
 export interface CreateAttentionTrackingForm {
-  apellidos: FormControl<string>;
   nombres: FormControl<string>;
   documento: FormControl<string>;
   grado: FormControl<string>;
   sexo: FormControl<string>;
   edad: FormControl<string>;
   sisben?: FormControl<string | undefined>;
-  fechaNacimiento?: FormControl<Date | undefined>;
+  fechaNacimiento?: FormControl<Date | Timestamp>;
   ciudadOrigen: FormControl<string>;
   paisOrigen: FormControl<string>;
   direccionResidencia?: FormControl<string | undefined>;
@@ -48,10 +51,25 @@ export interface CreateAttentionTrackingForm {
   seguimientoComportamental: FormGroup;
 }
 
+export const DATE_FORMAT = {
+  parse: { dateInput: 'dd/MM/yyyy'},
+  display: {
+    dateInput: 'dd/MM/yyyy',
+    monthYearLabel: 'MMM yyyy',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'yyyy'
+  }
+};
+
 @Component({
   selector: 'attention-tracking-form',
   standalone: true,
-  providers: [provideNativeDateAdapter()],
+  providers: [
+    provideNativeDateAdapter(),
+    { provide: DateAdapter, useClass: DateFnsAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT },
+    { provide: MAT_DATE_LOCALE, useValue: es }
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -84,6 +102,8 @@ export class AttentionTrackingFormComponent {
 
   private _snackBar = inject(MatSnackBar);
 
+  private _dataMutatorService = inject(DataMutatatorService);
+
   private _attentionTrackingId = '';
 
   trackingList$ = new Observable<TrackingForm[]>();
@@ -102,14 +122,13 @@ export class AttentionTrackingFormComponent {
   }
 
   form = this._formBuilder.group<CreateAttentionTrackingForm>({
-    apellidos: this._formBuilder.control('', Validators.required),
     nombres: this._formBuilder.control('', Validators.required),
     documento: this._formBuilder.control('', Validators.required),
     grado: this._formBuilder.control('', Validators.required),
     sexo: this._formBuilder.control('', Validators.required),
     edad: this._formBuilder.control('', Validators.required),
     sisben: this._formBuilder.control(''),
-    fechaNacimiento: this._formBuilder.control(undefined),
+    fechaNacimiento: this._formBuilder.control(undefined, Validators.required),
     ciudadOrigen: this._formBuilder.control('', Validators.required),
     paisOrigen: this._formBuilder.control('', Validators.required),
     direccionResidencia: this._formBuilder.control(''),
@@ -218,20 +237,20 @@ export class AttentionTrackingFormComponent {
   }
 
   async updateAttentionTracking() {
-    const attentionTracking = this.form.value as StudentRecordForm;
-    attentionTracking.nombres = attentionTracking.nombres.toLowerCase()
-    attentionTracking.apellidos = attentionTracking.apellidos.toLowerCase()
+    const dataForm = this.form.value as StudentRecordForm;
+    const attentionTracking = this._dataMutatorService.convertDataToLowerCase(dataForm) as StudentRecordForm;
     attentionTracking.fechaActualizacion = new Date();
+    attentionTracking.fechaNacimiento = new Date(dataForm.fechaNacimiento as Date)
     const doc = await this._attentionTrackingService.updateAttentionTracking(this._attentionTrackingId, attentionTracking);
   }
 
   async createAttentionTracking() {
-    const attentionTracking = this.form.value as StudentRecordForm;
-    attentionTracking.nombres = attentionTracking.nombres.toLowerCase()
-    attentionTracking.apellidos = attentionTracking.apellidos.toLowerCase()
+    const dataForm = this.form.value as StudentRecordForm;
+    const attentionTracking = this._dataMutatorService.convertDataToLowerCase(dataForm) as StudentRecordForm;
     attentionTracking.fechaCreacion = new Date();
     attentionTracking.fechaActualizacion = new Date();
     attentionTracking.userId = this.userId;
+    attentionTracking.fechaNacimiento = new Date(dataForm.fechaNacimiento as Date)
     const doc = await this._attentionTrackingService.createAttentionTracking(attentionTracking);
     return doc;
   }
@@ -239,16 +258,17 @@ export class AttentionTrackingFormComponent {
   private async setFormValue(id: string) {
     try {
       this.trackingList$ = await this._attentionTrackingService.getAllTracking(id);
-      const attentionTracking = await this._attentionTrackingService.getAttentionTrackingById(id);
+      const data = await this._attentionTrackingService.getAttentionTrackingById(id);
+      const fechaNacimiento = (data.fechaNacimiento as Timestamp).toDate();
+      const attentionTracking = this._dataMutatorService.convertDataToTitleCase(data) as StudentRecordForm;
       this.form.setValue({
-        apellidos: attentionTracking.apellidos.toUpperCase(),
-        nombres: attentionTracking.nombres.toUpperCase(),
+        nombres: attentionTracking.nombres,
         documento: attentionTracking.documento || '',
         grado: attentionTracking.grado || '',
         sexo: attentionTracking.sexo || '',
         edad: attentionTracking.edad || '',
         sisben: attentionTracking.sisben || '',
-        fechaNacimiento: new Date(attentionTracking.fechaNacimiento) || undefined,
+        fechaNacimiento: fechaNacimiento || new Date(),
         ciudadOrigen: attentionTracking.ciudadOrigen || '',
         paisOrigen: attentionTracking.paisOrigen || '',
         direccionResidencia: attentionTracking.direccionResidencia || '',
@@ -343,5 +363,12 @@ export class AttentionTrackingFormComponent {
       verticalPosition: 'top',
       horizontalPosition: 'end'
     })
+  }
+
+  calcAge(event: any) {
+    const date = new Date(event.value);
+    const today = new Date();
+    const edadMiliseconds = today.getTime() - date.getTime();
+    this.form.controls.edad.setValue(Math.floor((edadMiliseconds / (1000 * 60 * 60 * 24 * 365.25))).toString());
   }
 }

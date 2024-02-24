@@ -1,3 +1,4 @@
+import { Timestamp } from "@angular/fire/firestore";
 import { BehavioralFollowUp } from "./behavioral-follow-up.model";
 import { Caretaker } from "./caretaker.model";
 import { EducationalFollowUp } from "./educational-follow-up.model";
@@ -10,14 +11,14 @@ export interface StudentRecord extends StudentRecordForm {
 }
 
 export interface StudentRecordForm {
-    apellidos: string;
+    reverseSearchTokens: string[];
     nombres: string;
     documento: string;
     grado: string;
     sexo: string;
     edad: string;
     sisben: string;
-    fechaNacimiento: Date;
+    fechaNacimiento: Date | Timestamp;
     ciudadOrigen: string;
     paisOrigen: string;
     direccionResidencia: string;

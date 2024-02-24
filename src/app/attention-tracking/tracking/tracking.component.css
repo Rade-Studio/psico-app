@@ -1,5 +1,5 @@
 .table-tracking {
-  width: 100%;
+  overflow-x: auto;
 }
 
 .button-container {
@@ -8,4 +8,30 @@
 
 .button-control + .button-control {
   margin-left: 8px;
+}
+
+.mat-mdc-header-cell {
+  padding-top: 5px;
+  text-align: center;
+  font-weight: bold;
+
+}
+
+.mat-mdc-cell {
+  padding: 2px;
+  text-align: center;
+  height: 200px;
+}
+
+.mat-column-fecha-registro {
+  width: auto;
+  padding-right: 24px;
+  text-align: center;
+  border-right: 1px solid currentColor;
+}
+
+.mat-column-acciones {
+  width: auto;
+  text-align: center;
+  border-left: 1px solid currentColor;
 }
