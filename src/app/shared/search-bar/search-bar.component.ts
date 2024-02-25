@@ -13,7 +13,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'app-search-bar',
+  selector: 'shared-search-bar',
   standalone: true,
   imports: [
     CommonModule,

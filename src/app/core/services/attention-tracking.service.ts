@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, addDoc, collection, collectionData, doc, getDoc, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Firestore, Timestamp, addDoc, collection, collectionData, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
+import { Observable, map } from 'rxjs';
 import { StudentRecord, StudentRecordForm } from '../models/student-record.model'
 import { Tracking, TrackingForm } from '../models/tracking.model';
 
@@ -70,7 +70,18 @@ export class AttentionTrackingService {
       collection(this._firestore, PATH, attentionTrackingId, TRACKINGPATH)
     );
 
-    return collectionData(q, { idField: 'id' }) as Observable<Tracking[]>;
+    return collectionData(q, { idField: 'id' }).pipe(
+      map((trackings: Tracking[]) => {
+        return trackings.map((tracking: Tracking) => {
+          return {
+            ...tracking,
+            fechaIngreso: (tracking.fechaIngreso as Timestamp)
+              .toDate()
+              .toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })
+          };
+        });
+      })
+    ) as Observable<Tracking[]>;
   }
 
   async getTrackingById(attentionTrackingId: string, trackingId: string) {
@@ -93,6 +104,16 @@ export class AttentionTrackingService {
     try {
       const document = doc(this._firestore, PATH, attentionTrackingId, TRACKINGPATH, trackingId);
       return updateDoc(document, { ...tracking });
+    } catch (error) {
+      console.error('Error updating document:', error);
+      return undefined;
+    }
+  }
+
+  deleteTracking(attentionTrackingId: string, trackingId: string) {
+    try {
+      const document = doc(this._firestore, PATH, attentionTrackingId, TRACKINGPATH, trackingId);
+      return deleteDoc(document);
     } catch (error) {
       console.error('Error updating document:', error);
       return undefined;

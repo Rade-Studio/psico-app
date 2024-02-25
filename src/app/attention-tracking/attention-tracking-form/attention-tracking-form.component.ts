@@ -23,7 +23,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TrackingComponent } from '../tracking/tracking.component';
 import { TrackingForm } from '../../core/models/tracking.model';
 import { Observable } from 'rxjs';
-import { DataMutatatorService } from '../../core/services/data-mutatator.service';
+import { DataMutatatorService } from '../../core/services/DataMutatator.service';
 import { Timestamp } from '@angular/fire/firestore';
 
 export interface CreateAttentionTrackingForm {

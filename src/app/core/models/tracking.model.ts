@@ -11,5 +11,5 @@ export interface TrackingForm {
     socioFamiliar: string;
     motivoAtencion: string;
     evaluacion: string;
-    fechaIngreso: Date | Timestamp;
+    fechaIngreso: Date | Timestamp | string;
 }

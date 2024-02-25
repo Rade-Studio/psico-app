@@ -10,8 +10,14 @@ import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AttentionTrackingService } from '../../core/services/attention-tracking.service';
 import { Timestamp } from '@angular/fire/firestore';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { DateFnsAdapter } from '@angular/material-date-fns-adapter';
+import { provideNativeDateAdapter, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { es } from 'date-fns/locale';
+import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
 
 export interface CreateTrackingForm {
   academicos: FormControl<string>;
@@ -40,6 +46,8 @@ export interface CreateTrackingForm {
 })
 export class TrackingComponent implements OnInit  {
 
+  private _attentionTrackingService = inject(AttentionTrackingService);
+
   private _route = inject(ActivatedRoute);
 
   private _attentionTrackingId = '';
@@ -60,6 +68,18 @@ export class TrackingComponent implements OnInit  {
     });
   }
 
+  deleteTracking(trackingId: string) {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: false,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this._attentionTrackingService.deleteTracking(this._attentionTrackingId, trackingId);
+      }
+    });
+  }
+
   ngOnInit() {
     this._attentionTrackingId = this._route.snapshot.params['id'];
   }
@@ -67,9 +87,25 @@ export class TrackingComponent implements OnInit  {
 
 }
 
+export const DATE_FORMAT = {
+  parse: { dateInput: 'dd/MM/yyyy'},
+  display: {
+    dateInput: 'dd/MM/yyyy',
+    monthYearLabel: 'MMM yyyy',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'yyyy'
+  }
+};
+
 @Component({
   selector: 'dialog-new-tracking',
   templateUrl: './tracking-form.component.html',
+  providers: [
+    provideNativeDateAdapter(),
+    { provide: DateAdapter, useClass: DateFnsAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT },
+    { provide: MAT_DATE_LOCALE, useValue: es }
+  ],
   standalone: true,
   imports: [
     CommonModule,
@@ -84,6 +120,8 @@ export class TrackingComponent implements OnInit  {
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,
+    MatDatepickerModule,
+    FlexLayoutModule,
   ],
 })
 export class TrackingFormComponent implements OnInit {
@@ -104,7 +142,10 @@ export class TrackingFormComponent implements OnInit {
     fechaIngreso: new FormControl(new Date(), Validators.required),
   });
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { Id: string, trackingId: string | undefined }) {
+  constructor(
+    public dialogRef: MatDialogRef<TrackingFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { Id: string, trackingId: string | undefined }
+    ) {
   }
 
   ngOnInit() {
@@ -125,6 +166,34 @@ export class TrackingFormComponent implements OnInit {
       evaluacion: data.evaluacion,
       fechaIngreso: fechaIngreso,
     });
+  }
+
+  async save() {
+    if (this.form.invalid) {
+      return;
+    }
+
+    const tracking: TrackingForm = {
+      academicos: this.form.value.academicos,
+      conductuales: this.form.value.conductuales,
+      emocionales: this.form.value.emocionales,
+      socioFamiliar: this.form.value.socioFamiliar,
+      motivoAtencion: this.form.value.motivoAtencion,
+      evaluacion: this.form.value.evaluacion,
+      fechaIngreso: this.form.value.fechaIngreso,
+    };
+
+    if (this.data.trackingId) {
+      await this._attentionTrackingService.updateTracking(this.data.Id, this.data.trackingId, tracking);
+    } else {
+      await this._attentionTrackingService.createTracking(this.data.Id, tracking);
+    }
+
+    this.dialogRef.close();
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
 }

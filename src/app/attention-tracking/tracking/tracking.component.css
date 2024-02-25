@@ -1,4 +1,5 @@
-.table-tracking {
+table {
+  width: 100%;
   overflow-x: auto;
 }
 
@@ -19,8 +20,7 @@
 
 .mat-mdc-cell {
   padding: 2px;
-  text-align: center;
-  height: 200px;
+  height: 100px;
 }
 
 .mat-column-fecha-registro {
@@ -34,4 +34,8 @@
   width: auto;
   text-align: center;
   border-left: 1px solid currentColor;
+}
+
+.btn-actions {
+  margin: 0 5px;
 }

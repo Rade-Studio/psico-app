@@ -1,25 +1,44 @@
 <h2 mat-dialog-title>Registro nuevo seguimiento</h2>
 <mat-dialog-content>
-    <form [formGroup]="form" >
-        <mat-form-field>
-            <mat-label for="academicos">Academicos</mat-label>
-            <input matInput  type="text" class="form-control" id="academicos" formControlName="academicos">
+    <form [formGroup]="form" fxLayout fxLayout="column" fxLayoutGap="5px grid">
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="5px">
+            <mat-form-field fxFlex="50%" fxFlex.xs="100%">
+                <mat-label for="academicos">Academicos</mat-label>
+                <input matInput  type="text" class="form-control" id="academicos" formControlName="academicos">
+            </mat-form-field>
+            <mat-form-field fxFlex="50%" fxFlex.xs="100%">
+                <mat-label for="conductuales">Conductuales</mat-label>
+                <input matInput type="text" class="form-control" id="conductuales" formControlName="conductuales">
+            </mat-form-field>
+            <mat-form-field fxFlex="50%" fxFlex.xs="100%">
+                <mat-label for="emocionales">Emocionales</mat-label>
+                <input matInput type="text" class="form-control" id="emocionales" formControlName="emocionales">
+            </mat-form-field> 
+            <mat-form-field fxFlex="50%" fxFlex.xs="100%">
+                <mat-label for="socioFamiliar">Socio Familiar</mat-label>
+                <input matInput type="text" class="form-control" id="socioFamiliar" formControlName="socioFamiliar">
+            </mat-form-field>
+        </div>
+
+        <mat-form-field fxFlex="100%">
+            <mat-label>Fecha de Ingreso</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="fechaIngreso" (click)="picker.open()">
+            <mat-hint>DD/MM/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker" [disabled]="false"></mat-datepicker-toggle>
+            <mat-datepicker #picker touchUi [disabled]="false"></mat-datepicker>
         </mat-form-field>
+        
         <mat-form-field>
-            <mat-label for="conductuales">Conductuales</mat-label>
-            <input matInput type="text" class="form-control" id="conductuales" formControlName="conductuales">
+            <mat-label for="socioFamiliar">Motivo Atencion</mat-label>
+            <input matInput type="text" class="form-control" id="motivoAtencion" formControlName="motivoAtencion">
         </mat-form-field>
-        <mat-form-field>
-            <mat-label for="emocionales">Emocionales</mat-label>
-            <input matInput type="text" class="form-control" id="emocionales" formControlName="emocionales">
-        </mat-form-field> 
-        <mat-form-field>
-            <mat-label for="socioFamiliar">Socio Familiar</mat-label>
-            <input matInput type="text" class="form-control" id="socioFamiliar" formControlName="socioFamiliar">
+        <mat-form-field fxFlex="100%">
+            <mat-label for="socioFamiliar">Evaluacion</mat-label>
+            <textarea matInput formControlName="evaluacion" placeholder="Escribe la evaluacion." rows="5"></textarea>
         </mat-form-field>
     </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cancelar</button>
-    <button mat-button >Guardar</button>
+    <button mat-button mat-dialog-close (click)="onNoClick()">Cancelar</button>
+    <button mat-button (click)="save()">Guardar</button>
 </mat-dialog-actions>
