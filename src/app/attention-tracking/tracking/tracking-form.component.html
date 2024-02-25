@@ -2,22 +2,18 @@
 <mat-dialog-content>
     <form [formGroup]="form" fxLayout fxLayout="column" fxLayoutGap="5px grid">
         <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="5px">
-            <mat-form-field fxFlex="50%" fxFlex.xs="100%">
-                <mat-label for="academicos">Academicos</mat-label>
-                <input matInput  type="text" class="form-control" id="academicos" formControlName="academicos">
-            </mat-form-field>
-            <mat-form-field fxFlex="50%" fxFlex.xs="100%">
-                <mat-label for="conductuales">Conductuales</mat-label>
-                <input matInput type="text" class="form-control" id="conductuales" formControlName="conductuales">
-            </mat-form-field>
-            <mat-form-field fxFlex="50%" fxFlex.xs="100%">
-                <mat-label for="emocionales">Emocionales</mat-label>
-                <input matInput type="text" class="form-control" id="emocionales" formControlName="emocionales">
-            </mat-form-field> 
-            <mat-form-field fxFlex="50%" fxFlex.xs="100%">
-                <mat-label for="socioFamiliar">Socio Familiar</mat-label>
-                <input matInput type="text" class="form-control" id="socioFamiliar" formControlName="socioFamiliar">
-            </mat-form-field>
+            <p fxFlex="50%" fxFlex.xs="100%">
+                <mat-checkbox formControlName="academicos">Academicos</mat-checkbox>
+            </p>
+            <p fxFlex="50%" fxFlex.xs="100%">
+                <mat-checkbox formControlName="conductuales">Conductuales</mat-checkbox>
+            </p>
+            <p fxFlex="50%" fxFlex.xs="100%">
+                <mat-checkbox formControlName="emocionales">Emocionales</mat-checkbox>
+            </p>
+            <p fxFlex="50%" fxFlex.xs="100%">
+                <mat-checkbox formControlName="socioFamiliar">Socio Familiar</mat-checkbox>
+            </p>
         </div>
 
         <mat-form-field fxFlex="100%">

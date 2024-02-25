@@ -5,10 +5,10 @@ export interface Tracking extends TrackingForm {
 }
 
 export interface TrackingForm {
-    academicos: string;
-    conductuales: string;
-    emocionales: string;
-    socioFamiliar: string;
+    academicos: boolean;
+    conductuales: boolean;
+    emocionales: boolean;
+    socioFamiliar: boolean;
     motivoAtencion: string;
     evaluacion: string;
     fechaIngreso: Date | Timestamp | string;
