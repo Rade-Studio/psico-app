@@ -19,9 +19,9 @@ import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, Ma
     <mat-dialog-content>
       ¿Deseas eliminar permanentemente?
     </mat-dialog-content>
-    <mat-dialog-actions>
+    <mat-dialog-actions align="end">
       <button mat-button mat-dialog-close [mat-dialog-close]="false">No</button>
-      <button mat-button mat-dialog-close [mat-dialog-close]="true">Si</button>
+      <button mat-button mat-dialog-close color="warn" [mat-dialog-close]="true">Si</button>
     </mat-dialog-actions>
   `,
   styles: `

@@ -18,12 +18,13 @@ import { DateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { provideNativeDateAdapter, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { es } from 'date-fns/locale';
 import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 export interface CreateTrackingForm {
-  academicos: FormControl<string>;
-  conductuales: FormControl<string>;
-  emocionales: FormControl<string>;
-  socioFamiliar: FormControl<string>;
+  academicos: FormControl<boolean>;
+  conductuales: FormControl<boolean>;
+  emocionales: FormControl<boolean>;
+  socioFamiliar: FormControl<boolean>;
   motivoAtencion: FormControl<string>;
   evaluacion: FormControl<string>;
   fechaIngreso: FormControl<Date | Timestamp>;
@@ -121,6 +122,7 @@ export const DATE_FORMAT = {
     MatDialogActions,
     MatDialogClose,
     MatDatepickerModule,
+    MatCheckboxModule,
     FlexLayoutModule,
   ],
 })
@@ -133,10 +135,10 @@ export class TrackingFormComponent implements OnInit {
   private _trackingId = '';
 
   form = this._formBuilder.group<CreateTrackingForm>({
-    academicos: new FormControl('', Validators.maxLength(256)),
-    conductuales: new FormControl('', Validators.maxLength(256)),
-    emocionales: new FormControl('', Validators.maxLength(256)),
-    socioFamiliar: new FormControl('', Validators.maxLength(256)),
+    academicos: new FormControl(false, Validators.maxLength(256)),
+    conductuales: new FormControl(false, Validators.maxLength(256)),
+    emocionales: new FormControl(false, Validators.maxLength(256)),
+    socioFamiliar: new FormControl(false, Validators.maxLength(256)),
     motivoAtencion: new FormControl('', Validators.maxLength(1000)),
     evaluacion: new FormControl('', Validators.required),
     fechaIngreso: new FormControl(new Date(), Validators.required),

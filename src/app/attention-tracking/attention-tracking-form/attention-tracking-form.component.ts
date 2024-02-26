@@ -25,6 +25,9 @@ import { TrackingForm } from '../../core/models/tracking.model';
 import { Observable } from 'rxjs';
 import { DataMutatatorService } from '../../core/services/DataMutatator.service';
 import { Timestamp } from '@angular/fire/firestore';
+import { AutocompleteDataService } from '../../core/services/autocomplete-data.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSelectModule } from '@angular/material/select';
 
 export interface CreateAttentionTrackingForm {
   nombres: FormControl<string>;
@@ -83,10 +86,12 @@ export const DATE_FORMAT = {
     MatCheckboxModule,
     MatTooltipModule,
     MatSnackBarModule,
+    MatAutocompleteModule,
+    MatSelectModule,
     MatTabsModule,
     FlexLayoutModule,
     RouterLink,
-    TrackingComponent
+    TrackingComponent,
   ],
   templateUrl: './attention-tracking-form.component.html',
   styleUrl: './attention-tracking-form.component.css',
@@ -104,6 +109,8 @@ export class AttentionTrackingFormComponent {
 
   private _dataMutatorService = inject(DataMutatatorService);
 
+  private _autocompleteDataService = inject(AutocompleteDataService);
+
   private _attentionTrackingId = '';
 
   trackingList$ = new Observable<TrackingForm[]>();
@@ -113,6 +120,18 @@ export class AttentionTrackingFormComponent {
   trackingTabIsDisabled = true;
 
   userId = "";
+
+  epsData$ = this._autocompleteDataService.getEpsData();
+
+  cityData$ = this._autocompleteDataService.getCityData();
+
+  countryData$ = this._autocompleteDataService.getCountryData();
+
+  neighborhoodData$ = this._autocompleteDataService.getNeighborhoodData();
+
+  genders$ = this._autocompleteDataService.getGenderData();
+
+  grades$ = this._autocompleteDataService.getGradeData();
 
   @Input() set id(value: string) {
     if (value) {
@@ -241,6 +260,7 @@ export class AttentionTrackingFormComponent {
     const attentionTracking = this._dataMutatorService.convertDataToLowerCase(dataForm) as StudentRecordForm;
     attentionTracking.fechaActualizacion = new Date();
     attentionTracking.fechaNacimiento = new Date(dataForm.fechaNacimiento as Date)
+    console.log('attentionTracking:', attentionTracking);
     const doc = await this._attentionTrackingService.updateAttentionTracking(this._attentionTrackingId, attentionTracking);
   }
 

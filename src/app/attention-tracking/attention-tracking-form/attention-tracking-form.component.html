@@ -53,11 +53,21 @@
                         </mat-form-field>
                         <mat-form-field fxFlex="25%" fxFlex.xs="100%">
                             <mat-label>Grado</mat-label>
-                            <input matInput formControlName="grado" placeholder="Grado">
+                            <input matInput formControlName="grado" placeholder="Grado" [matAutocomplete]="autoGrade">
+                            <mat-autocomplete #autoGrade="matAutocomplete">
+                                <mat-option *ngFor="let option of grades$ | async" [value]="option">
+                                  {{ option }}
+                                </mat-option>
+                            </mat-autocomplete>
                         </mat-form-field>
                         <mat-form-field fxFlex="25%" fxFlex.xs="100%">
                             <mat-label>Sexo</mat-label>
-                            <input matInput formControlName="sexo" placeholder="Sexo">
+                            <input matInput formControlName="sexo" placeholder="Sexo" [matAutocomplete]="autoSexo">
+                            <mat-autocomplete #autoSexo="matAutocomplete">
+                                <mat-option *ngFor="let option of genders$ | async" [value]="option">
+                                  {{ option }}
+                                </mat-option>
+                            </mat-autocomplete>
                         </mat-form-field>
                         <mat-form-field fxFlex="25%" fxFlex.xs="100%">
                             <mat-label>Fecha de Nacimiento</mat-label>
@@ -72,23 +82,43 @@
                         </mat-form-field>
                         <mat-form-field fxFlex="25%" fxFlex.xs="100%">
                             <mat-label>Barrio</mat-label>
-                            <input matInput formControlName="barrio" placeholder="Barrio">
+                            <input matInput formControlName="barrio" placeholder="Barrio" [matAutocomplete]="autoNeighborhood">
+                            <mat-autocomplete #autoNeighborhood="matAutocomplete">
+                                <mat-option *ngFor="let option of neighborhoodData$ | async" [value]="option">
+                                  {{ option }}
+                                </mat-option>
+                            </mat-autocomplete>
                         </mat-form-field>
                         <mat-form-field fxFlex="50%" fxFlex.xs="100%">
                             <mat-label>Direccion de Residencia</mat-label>
                             <input matInput formControlName="direccionResidencia" placeholder="Direccion de Residencia">
                         </mat-form-field>
                         <mat-form-field fxFlex="25%" fxFlex.xs="100%">
-                            <mat-label>Ciudad de Origen</mat-label>
-                            <input matInput formControlName="ciudadOrigen" placeholder="Ciudad de Origen">
+                            <mat-label>Pais de Origen</mat-label>
+                            <input matInput formControlName="paisOrigen" placeholder="Pais de Origen" [matAutocomplete]="autoCountry">
+                            <mat-autocomplete #autoCountry="matAutocomplete">
+                                <mat-option *ngFor="let option of countryData$ | async" [value]="option">
+                                  {{ option }}
+                                </mat-option>
+                            </mat-autocomplete>
                         </mat-form-field>
                         <mat-form-field fxFlex="25%" fxFlex.xs="100%">
-                            <mat-label>Pais de Origen</mat-label>
-                            <input matInput formControlName="paisOrigen" placeholder="Pais de Origen">
+                            <mat-label>Ciudad de Origen</mat-label>
+                            <input matInput formControlName="ciudadOrigen" placeholder="Ciudad de Origen" [matAutocomplete]="autoCity">
+                            <mat-autocomplete #autoCity="matAutocomplete">
+                                <mat-option *ngFor="let option of cityData$ | async" [value]="option">
+                                  {{ option }}
+                                </mat-option>
+                              </mat-autocomplete>
                         </mat-form-field>
                         <mat-form-field fxFlex="50%" fxFlex.xs="100%">
                             <mat-label>EPS</mat-label>
-                            <input matInput formControlName="eps" placeholder="EPS">
+                            <input matInput formControlName="eps" placeholder="EPS" [matAutocomplete]="autoEps">
+                            <mat-autocomplete #autoEps="matAutocomplete">
+                                <mat-option *ngFor="let option of epsData$ | async" [value]="option">
+                                  {{ option }}
+                                </mat-option>
+                              </mat-autocomplete>
                         </mat-form-field>
                         <mat-form-field fxFlex="25%" fxFlex.xs="100%">
                             <mat-label>Telefono</mat-label>

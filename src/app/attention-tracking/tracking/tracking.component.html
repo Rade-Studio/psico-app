@@ -17,25 +17,25 @@
             <!-- academicos Column -->
             <ng-container matColumnDef="academicos">
               <th mat-header-cell *matHeaderCellDef> Academicos </th>
-              <td mat-cell *matCellDef="let element"> {{element.academicos}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.academicos ? 'SI' : 'NO'}} </td>
             </ng-container>
 
             <!-- conductuales Column -->
             <ng-container matColumnDef="conductuales">
               <th mat-header-cell *matHeaderCellDef> Conductuales </th>
-              <td mat-cell *matCellDef="let element"> {{element.conductuales}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.conductuales ? 'SI' : 'NO'}} </td>
             </ng-container>
 
             <!-- emocionales Column -->
             <ng-container matColumnDef="emocionales">
               <th mat-header-cell *matHeaderCellDef> Emocionales </th>
-              <td mat-cell *matCellDef="let element"> {{element.emocionales}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.emocionales ? 'SI' : 'NO'}} </td>
             </ng-container>
 
             <!-- socio-familiar Column -->
             <ng-container matColumnDef="socio-familiar">
               <th mat-header-cell *matHeaderCellDef> Socio Familiar </th>
-              <td mat-cell *matCellDef="let element"> {{element.socioFamiliar}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.socioFamiliar ? 'SI' : 'NO'}} </td>
             </ng-container>
 
             <!-- motivo-atencion Column -->
