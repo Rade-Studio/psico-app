@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,38 +37,35 @@ import { AttentionTrackingService } from '../core/services/attention-tracking.se
   styleUrl: './home.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   authStateObs$ = () => inject(AuthService).authState$;
 
   _attentionTrackingService = inject(AttentionTrackingService);
 
   attentionTracking$ = new Observable<StudentRecord[]>();
 
-  constructor() {
+  userId = '';
+
+  constructor() {};
+
+  ngOnInit() {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        this.userId = user.uid;
         this.attentionTracking$ = this._attentionTrackingService.getAllAttentionTracking(user.uid);
       }
     });
-  };
+  }
 
   async searchByQuery(name: string) {
-    const auth = getAuth();
-    let userId = "";
-    await onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        userId = user.uid;
-      }
-    });
-
     if (!name) {
-      this.attentionTracking$ = this._attentionTrackingService.getAllAttentionTracking(userId);
+      this.attentionTracking$ = this._attentionTrackingService.getAllAttentionTracking(this.userId);
       return;
     }
 
     try {
-      this.attentionTracking$ = this._attentionTrackingService.searchByQuery(name, userId);
+      this.attentionTracking$ = this._attentionTrackingService.searchByQuery(name, this.userId);
     } catch (error) {
       console.error(error);
     }

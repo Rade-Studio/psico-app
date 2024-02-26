@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, Timestamp, addDoc, collection, collectionData, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
+import { Firestore, Timestamp, addDoc, collection, collectionData, deleteDoc, doc, getDoc, getDocs, orderBy, query, updateDoc, where } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import { StudentRecord, StudentRecordForm } from '../models/student-record.model'
 import { Tracking, TrackingForm } from '../models/tracking.model';
@@ -23,8 +23,6 @@ export class AttentionTrackingService {
       where('userId', '==', userId),
       where('reverseSearchTokens', 'array-contains-any', searchTokens)
     );
-
-    console.log(q);
     
     return collectionData(q, { idField: 'id' }) as Observable<StudentRecord[]>;
   }
@@ -67,7 +65,8 @@ export class AttentionTrackingService {
 
   getAllTracking(attentionTrackingId: string) {
     const q = query(
-      collection(this._firestore, PATH, attentionTrackingId, TRACKINGPATH)
+      collection(this._firestore, PATH, attentionTrackingId, TRACKINGPATH),
+      orderBy('fechaIngreso', 'desc')
     );
 
     return collectionData(q, { idField: 'id' }).pipe(
