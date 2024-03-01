@@ -1,6 +1,11 @@
 {
-  "name": "psico-app",
+  "name": "Seguimiento Express",
   "version": "0.0.0",
+  "author": {
+    "name": "RADE Studio",
+    "email": "ahernand.development@gmail.com",
+    "url": "https://github.com/Rade-Studio"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -25,6 +30,7 @@
     "@angular/router": "^17.2.0",
     "date-fns": "^3.3.1",
     "firestore": "^1.1.6",
+    "ngx-spinner": "^16.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

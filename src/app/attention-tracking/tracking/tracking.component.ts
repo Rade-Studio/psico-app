@@ -11,7 +11,7 @@ import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators 
 import { AttentionTrackingService } from '../../core/services/attention-tracking.service';
 import { Timestamp } from '@angular/fire/firestore';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DateFnsAdapter } from '@angular/material-date-fns-adapter';
@@ -19,6 +19,8 @@ import { provideNativeDateAdapter, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCAL
 import { es } from 'date-fns/locale';
 import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 export interface CreateTrackingForm {
   academicos: FormControl<boolean>;
@@ -40,6 +42,7 @@ export interface CreateTrackingForm {
     MatTableModule,
     MatButtonModule,
     MatIconModule,
+    MatSnackBarModule,
   ],
   templateUrl: './tracking.component.html',
   styleUrl: './tracking.component.css',
@@ -51,7 +54,13 @@ export class TrackingComponent implements OnInit  {
 
   private _route = inject(ActivatedRoute);
 
-  private _attentionTrackingId = '';
+  private _router = inject(Router);
+
+  private _snackBar = inject(MatSnackBar);
+
+  private _spinner = inject(NgxSpinnerService);
+
+  _attentionTrackingId = '';
 
   @Input() dataSource = new Observable<TrackingForm[]>();
 
@@ -59,30 +68,50 @@ export class TrackingComponent implements OnInit  {
 
   constructor(public dialog: MatDialog) {}
 
+  openTrackingDetails(trackingId: string) {
+    window.open(`/attention-tracking/ticket/${this._attentionTrackingId}/tracking/${trackingId}`, '_blank');
+  }
+
   openTrackingDialog(trackingId: string | undefined) {
     const dialogRef = this.dialog.open(TrackingFormComponent, {
       data: { Id: this._attentionTrackingId, trackingId },
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      if (result) {
+        this.openSnackBar(result);
+      }
+      
+      this._spinner.hide();
     });
   }
 
-  deleteTracking(trackingId: string) {
+  async deleteTracking(trackingId: string) {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: false,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(async result => {
       if (result) {
-        this._attentionTrackingService.deleteTracking(this._attentionTrackingId, trackingId);
+        this._spinner.show();
+        await this._attentionTrackingService.deleteTracking(this._attentionTrackingId, trackingId);
+        this._spinner.hide();
+
+        this.openSnackBar('Registro eliminado');
       }
     });
   }
 
   ngOnInit() {
     this._attentionTrackingId = this._route.snapshot.params['id'];
+  }
+
+  openSnackBar(message: string) {
+    return this._snackBar.open(message, 'Cerrar', {
+      duration: 5000,
+      verticalPosition: 'top',
+      horizontalPosition: 'end'
+    })
   }
 
 
@@ -132,6 +161,8 @@ export class TrackingFormComponent implements OnInit {
   
   private _formBuilder = inject(FormBuilder).nonNullable;
 
+  private _spinner = inject(NgxSpinnerService);
+
   private _trackingId = '';
 
   form = this._formBuilder.group<CreateTrackingForm>({
@@ -175,6 +206,8 @@ export class TrackingFormComponent implements OnInit {
       return;
     }
 
+    this._spinner.show();
+
     const tracking: TrackingForm = {
       academicos: this.form.value.academicos,
       conductuales: this.form.value.conductuales,
@@ -183,15 +216,19 @@ export class TrackingFormComponent implements OnInit {
       motivoAtencion: this.form.value.motivoAtencion,
       evaluacion: this.form.value.evaluacion,
       fechaIngreso: this.form.value.fechaIngreso,
+      eliminado: false,
     };
 
     if (this.data.trackingId) {
       await this._attentionTrackingService.updateTracking(this.data.Id, this.data.trackingId, tracking);
+      
+      this.dialogRef.close('Registro actualizado');
     } else {
       await this._attentionTrackingService.createTracking(this.data.Id, tracking);
+
+      this.dialogRef.close('Registro creado exitosamente');
     }
 
-    this.dialogRef.close();
   }
 
   onNoClick(): void {

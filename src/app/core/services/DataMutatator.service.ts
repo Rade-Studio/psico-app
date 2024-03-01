@@ -27,10 +27,15 @@ export class DataMutatatorService {
   }
 
   private capitalizeString(str: string): string {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    const words = str.split(/\W+/);
+  
+    // Capitalize the first letter of each word using map
+    return words.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
   }
 
   private convertToTitleCase(obj: any): any {
+    const wordsExceptions = ['correoElectronico', 'grado', 'userId', 'id', 'fechaCreacion', 'fechaActualizacion', 'eliminado']
+
     if (typeof obj === 'string') {
       return this.capitalizeString(obj);
     }
@@ -40,8 +45,10 @@ export class DataMutatatorService {
     if (typeof obj === 'object') {
       const convertedObj = {};
       for (const key in obj) {
-        if (obj.hasOwnProperty(key)) {
+        if (obj.hasOwnProperty(key) && !wordsExceptions.includes(key)) {
           convertedObj[key] = this.convertToTitleCase(obj[key]);
+        } else {
+          convertedObj[key] = obj[key];
         }
       }
       return convertedObj;

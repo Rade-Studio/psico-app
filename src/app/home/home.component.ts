@@ -15,6 +15,7 @@ import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
 import { StudentRecord } from '../core/models/student-record.model';
 import { AuthService } from '../core/services/auth.service';
 import { AttentionTrackingService } from '../core/services/attention-tracking.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-home',
@@ -42,11 +43,14 @@ export class HomeComponent implements OnInit {
 
   _attentionTrackingService = inject(AttentionTrackingService);
 
+  private _spinner = inject(NgxSpinnerService);
+
   attentionTracking$ = new Observable<StudentRecord[]>();
 
   userId = '';
 
-  constructor() {};
+  constructor() {
+  };
 
   ngOnInit() {
     const auth = getAuth();

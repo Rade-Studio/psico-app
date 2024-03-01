@@ -4,7 +4,7 @@
         <mat-tab label="Informacion Estudiante">
 
           <div class="mat-elevation-z4">
-            <form [formGroup]="form" class="block-container" (submit)="createOrUpdateAttentionTracking()">
+            <form [formGroup]="form" class="block-container">
 
                 <!-- Botonos de acceso rapido -->
                 <div class="accebility-buttons" fxLayout fxLayout="row wrap" 
@@ -466,7 +466,7 @@
 
                 <div class="accebility-buttons" fxLayout fxLayout="row wrap" 
                 fxLayoutAlign="center">
-                    <button mat-fab extended color="primary">
+                    <button mat-fab extended color="primary" (click)="createOrUpdateAttentionTracking()">
                         <mat-icon>done</mat-icon> Guardar
                     </button>
                 </div>

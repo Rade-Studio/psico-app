@@ -20,6 +20,7 @@ table {
 
 .mat-mdc-cell {
   padding: 2px;
+  text-align: center;
   height: 100px;
 }
 

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, Timestamp, addDoc, collection, collectionData, deleteDoc, doc, getDoc, getDocs, orderBy, query, updateDoc, where } from '@angular/fire/firestore';
-import { Observable, map } from 'rxjs';
+import { Observable, map, timeInterval } from 'rxjs';
 import { StudentRecord, StudentRecordForm } from '../models/student-record.model'
 import { Tracking, TrackingForm } from '../models/tracking.model';
 
@@ -21,6 +21,7 @@ export class AttentionTrackingService {
     const q = query(
       this._collection, 
       where('userId', '==', userId),
+      where('eliminado', '==', false),
       where('reverseSearchTokens', 'array-contains-any', searchTokens)
     );
     
@@ -46,7 +47,11 @@ export class AttentionTrackingService {
 
   getAllAttentionTracking(userId: string) {
 
-    const q = query(this._collection, where('userId', '==', userId));
+    const q = query(
+      this._collection, 
+      where('userId', '==', userId),
+      where('eliminado', '==', false),
+    );
 
     return collectionData(q, { idField: 'id' }) as Observable<StudentRecord[]>;
   }
@@ -63,9 +68,21 @@ export class AttentionTrackingService {
     }
   }
 
+  async deleteAttentionTracking(id: string) {
+    try {
+      const document = doc(this._firestore, PATH, id);
+      // return deleteDoc(document);
+      return await updateDoc(document, { eliminado: true });
+    } catch (error) {
+      console.error('Error updating document:', error);
+      return undefined;
+    }
+  }
+
   getAllTracking(attentionTrackingId: string) {
     const q = query(
       collection(this._firestore, PATH, attentionTrackingId, TRACKINGPATH),
+      where('eliminado', '==', false),
       orderBy('fechaIngreso', 'desc')
     );
 
@@ -109,10 +126,10 @@ export class AttentionTrackingService {
     }
   }
 
-  deleteTracking(attentionTrackingId: string, trackingId: string) {
+  async deleteTracking(attentionTrackingId: string, trackingId: string) {
     try {
       const document = doc(this._firestore, PATH, attentionTrackingId, TRACKINGPATH, trackingId);
-      return deleteDoc(document);
+      return await updateDoc(document, { eliminado: true });
     } catch (error) {
       console.error('Error updating document:', error);
       return undefined;
