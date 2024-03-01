@@ -16,7 +16,7 @@
                     <button mat-icon-button color="primary" [routerLink]="['attention-tracking/edit/', record.id]">
                         <mat-icon>edit</mat-icon>
                     </button>
-                    <button mat-icon-button color="warn">
+                    <button mat-icon-button color="warn" (click)="delete(record.id)">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </mat-card-actions>

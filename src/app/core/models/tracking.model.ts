@@ -12,4 +12,5 @@ export interface TrackingForm {
     motivoAtencion: string;
     evaluacion: string;
     fechaIngreso: Date | Timestamp | string;
+    eliminado: boolean;
 }

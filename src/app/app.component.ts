@@ -6,6 +6,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from './core/services/auth.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 
 interface Item {
   name: string
@@ -22,15 +23,20 @@ interface Item {
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
+    NgxSpinnerModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'psico-app';
+  title = 'Seguimento Express';
 
   private _authService = inject(AuthService);
+
   private _router = inject(Router);
+
+  private _spinner = inject(NgxSpinnerService);
+
   isAuthenticated = false;
 
   constructor() {
@@ -39,8 +45,12 @@ export class AppComponent {
     });
   }
 
-  logout() {
-    this._authService.logOut();
-    this._router.navigate(['/log-in']);
+  async logout() {
+
+    this._spinner.show();
+    await this._authService.logOut();
+    this._router.navigateByUrl('/log-in');
+    this._spinner.hide();
+
   }
 }

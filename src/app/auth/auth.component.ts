@@ -15,6 +15,7 @@ import { AuthService } from '../core/services/auth.service';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Credential } from '../core/models/credential.model';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-auth',
@@ -47,6 +48,8 @@ export class AuthComponent {
 
   private _snackBar = inject(MatSnackBar);
 
+  private _spinner = inject(NgxSpinnerService);
+
   constructor() {}
 
   get isEmailValid(): string | boolean {
@@ -66,6 +69,8 @@ export class AuthComponent {
   async logIn(): Promise<void> {
     if (this.form.valid) {
 
+      this._spinner.show();
+
       const credential: Credential = {
         email: this.form.value.email,
         password: this.form.value.password
@@ -73,13 +78,12 @@ export class AuthComponent {
 
       try {
         await this.authService.loginWithEmailAndPassword(credential);
-        const snackBarRef = this.openSnackBar('Iniciaste session exitosamente ✅');
-
-        snackBarRef.afterDismissed().subscribe(() => {
-          this.router.navigateByUrl('/');
-        })
+        this.router.navigateByUrl('/');
+        this._spinner.hide();
+        
+        this.openSnackBar('Iniciaste session exitosamente ✅');
       } catch (error) {
-        const snackBarRef = this.openSnackBar('Datos invalidos ❌')
+        this.openSnackBar('Datos invalidos ❌')
         console.log(error);
       }
 

@@ -28,6 +28,7 @@ import { Timestamp } from '@angular/fire/firestore';
 import { AutocompleteDataService } from '../../core/services/autocomplete-data.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 export interface CreateAttentionTrackingForm {
   nombres: FormControl<string>;
@@ -52,6 +53,7 @@ export interface CreateAttentionTrackingForm {
   estadoSalud: FormGroup;
   seguimientoEducativos: FormGroup;
   seguimientoComportamental: FormGroup;
+  eliminado: boolean
 }
 
 export const DATE_FORMAT = {
@@ -111,6 +113,8 @@ export class AttentionTrackingFormComponent {
 
   private _autocompleteDataService = inject(AutocompleteDataService);
 
+  private _spinner = inject(NgxSpinnerService);
+
   private _attentionTrackingId = '';
 
   trackingList$ = new Observable<TrackingForm[]>();
@@ -154,7 +158,7 @@ export class AttentionTrackingFormComponent {
     barrio: this._formBuilder.control(''),
     telefono: this._formBuilder.control('', Validators.required),
     estrato: this._formBuilder.control('', Validators.required),
-    correoElectronico: this._formBuilder.control('', [Validators.required, Validators.email]),
+    correoElectronico: this._formBuilder.control('', [Validators.email]),
     eps: this._formBuilder.control(''),
     acudiente: this._formBuilder.group({
       nombre: new FormControl(''),
@@ -222,7 +226,8 @@ export class AttentionTrackingFormComponent {
       empatia: new FormControl(false),
       colaboracion: new FormControl(false),
       problemasResueltos: new FormControl(''),
-    })
+    }),
+    eliminado: false
   });
 
   constructor() { 
@@ -235,20 +240,27 @@ export class AttentionTrackingFormComponent {
   }
 
   async createOrUpdateAttentionTracking() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.openSnackBar('Por favor, complete los campos obligatorios. ❌');
+      return;
+    };
 
     try {
+      this._spinner.show();
       if (!this._attentionTrackingId) {
         const doc = await this.createAttentionTracking();
-        const snackBarRef = this.openSnackBar('Registro creado exitosamente. ✅');
 
+        const snackBarRef = this.openSnackBar('Registro creado exitosamente. ✅');
         snackBarRef.afterDismissed().subscribe(() => {
           this._router.navigate(['/attention-tracking/edit', doc.id]);
+          
+          this._spinner.hide();
         })
       } else {
         await this.updateAttentionTracking();
-        
         this.openSnackBar('Registro actualizado exitosamente. ✅');
+
+        this._spinner.hide();
       }
     } catch (error) {
       console.error('Error creating attention tracking:', error);
@@ -260,8 +272,8 @@ export class AttentionTrackingFormComponent {
     const attentionTracking = this._dataMutatorService.convertDataToLowerCase(dataForm) as StudentRecordForm;
     attentionTracking.fechaActualizacion = new Date();
     attentionTracking.fechaNacimiento = new Date(dataForm.fechaNacimiento as Date)
-    console.log('attentionTracking:', attentionTracking);
-    const doc = await this._attentionTrackingService.updateAttentionTracking(this._attentionTrackingId, attentionTracking);
+
+    await this._attentionTrackingService.updateAttentionTracking(this._attentionTrackingId, attentionTracking);
   }
 
   async createAttentionTracking() {
@@ -271,12 +283,14 @@ export class AttentionTrackingFormComponent {
     attentionTracking.fechaActualizacion = new Date();
     attentionTracking.userId = this.userId;
     attentionTracking.fechaNacimiento = new Date(dataForm.fechaNacimiento as Date)
+    attentionTracking.eliminado = false;
     const doc = await this._attentionTrackingService.createAttentionTracking(attentionTracking);
     return doc;
   }
 
   private async setFormValue(id: string) {
     try {
+      this._spinner.show();
       this.trackingList$ = await this._attentionTrackingService.getAllTracking(id);
       const data = await this._attentionTrackingService.getAttentionTrackingById(id);
       const fechaNacimiento = (data.fechaNacimiento as Timestamp).toDate();
@@ -363,9 +377,11 @@ export class AttentionTrackingFormComponent {
           empatia: attentionTracking.seguimientoComportamental.empatia || false,
           colaboracion: attentionTracking.seguimientoComportamental.colaboracion || false,
           problemasResueltos: attentionTracking.seguimientoComportamental.problemasResueltos || '',
-        }
+        },
+        eliminado: attentionTracking.eliminado || false
       })
       this.trackingTabIsDisabled = false;
+      this._spinner.hide();
     } catch (error) {
       console.error('Error getting attention tracking:', error);
     }
@@ -379,7 +395,7 @@ export class AttentionTrackingFormComponent {
 
   openSnackBar(message: string) {
     return this._snackBar.open(message, 'Cerrar', {
-      duration: 2500,
+      duration: 5000,
       verticalPosition: 'top',
       horizontalPosition: 'end'
     })

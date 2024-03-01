@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-    <button mat-button [routerLink]="['/']"><span>Registros de Psicoanalisis</span></button>
+    <button mat-button [routerLink]="['/']"><span>SEGUIMIENTO EXPRESS</span></button>
     <span class="spacer"></span>
     <ng-container *ngIf="isAuthenticated">
         <button mat-icon-button aria-label="Example icon-button with heart icon" matTooltip="Cerrar Sesion" matTooltipPosition="left" (click)="logout()">
@@ -7,4 +7,5 @@
         </button>
     </ng-container>
 </mat-toolbar>
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-square-clockwise-spin" [fullScreen] = "true"><p style="color: white" > Cargando... </p></ngx-spinner>
 <router-outlet></router-outlet>

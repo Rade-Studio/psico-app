@@ -41,26 +41,26 @@
             <!-- motivo-atencion Column -->
             <ng-container matColumnDef="motivo-atencion">
               <th mat-header-cell *matHeaderCellDef> Motivo de Atencion </th>
-              <td mat-cell *matCellDef="let element"> {{element.motivoAtencion}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.motivoAtencion | slice:1:30 }} ... </td>
             </ng-container>
 
             <!-- evaluacion Column -->
             <ng-container matColumnDef="evaluacion">
               <th mat-header-cell *matHeaderCellDef> Evaluacion </th>
-              <td mat-cell *matCellDef="let element"> {{element.evaluacion}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.evaluacion | slice:1:30 }} ... </td>
             </ng-container>
 
             <!-- acciones Column -->
             <ng-container matColumnDef="acciones" stickyEnd>
                 <th mat-header-cell *matHeaderCellDef> Acciones </th>
                 <td mat-cell *matCellDef="let element">
-                    <button mat-button color="primary" class="btn-actions">
-                        <mat-icon>visibility</mat-icon>
+                    <button mat-icon-button color="primary" class="btn-actions" (click)="openTrackingDetails(element.id)">
+                        <mat-icon>print</mat-icon>
                     </button>
-                    <button mat-button color="accent" class="btn-actions" (click)="openTrackingDialog(element.id)">
+                    <button mat-icon-button color="accent" class="btn-actions" (click)="openTrackingDialog(element.id)">
                         <mat-icon>edit</mat-icon>
                     </button>
-                    <button mat-button color="warn" class="btn-actions" (click)="deleteTracking(element.id)">
+                    <button mat-icon-button color="warn" class="btn-actions" (click)="deleteTracking(element.id)">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </td>

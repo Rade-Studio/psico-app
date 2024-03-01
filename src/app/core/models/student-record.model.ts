@@ -37,4 +37,5 @@ export interface StudentRecordForm {
     estadoSalud: HealthStatus;
     seguimientoEducativos: EducationalFollowUp;
     seguimientoComportamental: BehavioralFollowUp;
+    eliminado: boolean;
   }

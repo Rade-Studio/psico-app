@@ -30,6 +30,10 @@ export const routes: Routes = [
             {
                 path: 'new-tracking',
                 loadComponent: () => import('./attention-tracking/tracking/tracking.component').then(m => m.TrackingComponent)
+            },
+            {
+                path: 'ticket/:id/tracking/:idTracking',
+                loadComponent: () => import('./attention-tracking/attention-tracking-details/attention-tracking-details.component').then(m => m.AttentionTrackingDetailsComponent)
             }
         ]
     },

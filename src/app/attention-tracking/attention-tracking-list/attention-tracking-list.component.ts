@@ -6,10 +6,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { AttentionTrackingService } from '../../core/services/attention-tracking.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'attention-tracking-list',
@@ -33,7 +37,36 @@ import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
 export class AttentionTrackingListComponent {
 
   
+  private _router = inject(Router);
+
+  private _attentionTrackingService = inject(AttentionTrackingService);
+
+  private _spinner = inject(NgxSpinnerService);
+
+  private _snackBar = inject(MatSnackBar);
+  
   @Input() attentionTracking$: Observable<StudentRecord[]>;
 
+  constructor(public dialog: MatDialog) {}
+
+  async delete(id: string) {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: false,
+    });
+
+    dialogRef.afterClosed().subscribe(async result => {
+      if (result) {
+        this._spinner.show();
+        await this._attentionTrackingService.deleteAttentionTracking(id);
+        this._spinner.hide();
+
+        this._snackBar.open("Registro eliminado.", 'Cerrar', {
+          duration: 5000,
+          verticalPosition: 'top',
+          horizontalPosition: 'end'
+        })
+      }
+    });
+  }
 
 }
