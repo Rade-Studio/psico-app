@@ -39,3 +39,29 @@ export interface StudentRecordForm {
     seguimientoComportamental: BehavioralFollowUp;
     eliminado: boolean;
   }
+
+  export interface StudentRecordImport {
+    reverseSearchTokens: string[];
+    nombres: string;
+    documento: string;
+    grado: string;
+    sexo: string;
+    edad: string;
+    sisben: string;
+    fechaNacimiento: Date | Timestamp;
+    ciudadOrigen: string;
+    paisOrigen: string;
+    direccionResidencia: string;
+    barrio: string;
+    telefono: string;
+    estrato: string;
+    correoElectronico: string;
+    eps: string;
+    fechaCreacion: Date;
+    fechaActualizacion: Date;
+    userId: string;
+    acudiente: Caretaker;
+    padre: FamilyMember;
+    madre: FamilyMember;
+    eliminado: boolean;
+  }

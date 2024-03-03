@@ -8,8 +8,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { AttentionTrackingService } from '../../core/services/attention-tracking.service';
 import { Router, RouterLink } from '@angular/router';
 import { Observable, map } from 'rxjs';
-import { AuthService } from '../../core/services/auth.service';
-import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
 import { NgxSpinnerService } from 'ngx-spinner';

@@ -34,7 +34,7 @@ export class DataMutatatorService {
   }
 
   private convertToTitleCase(obj: any): any {
-    const wordsExceptions = ['correoElectronico', 'grado', 'userId', 'id', 'fechaCreacion', 'fechaActualizacion', 'eliminado']
+    const wordsExceptions = ['correoElectronico', 'grado', 'userId', 'id', 'fechaCreacion', 'fechaActualizacion', 'eliminado', 'barrio']
 
     if (typeof obj === 'string') {
       return this.capitalizeString(obj);

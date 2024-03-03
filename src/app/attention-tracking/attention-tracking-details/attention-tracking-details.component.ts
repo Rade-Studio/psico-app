@@ -54,6 +54,8 @@ export class AttentionTrackingDetailsComponent {
 
   private _trackingId = '';
 
+  fechaSeguimiento = '';
+
   form = this._formBuilder.group({
     nombres: this._formBuilder.control({value: '', disabled: true}),
     documento: this._formBuilder.control({value: '', disabled: true}),
@@ -98,43 +100,44 @@ export class AttentionTrackingDetailsComponent {
     try {
       this._spinner.show();
       this._tracking = await this._attentionTrackingService.getTrackingById(attentionTrackingId, trackingId);
+      this.fechaSeguimiento = (this._tracking.fechaIngreso as Timestamp).toDate().toLocaleDateString('es-CO');
       const data = await this._attentionTrackingService.getAttentionTrackingById(attentionTrackingId);
       this._AttentionTracking = this._dataMutator.convertDataToTitleCase(data);
       const fechaNacimiento = (data.fechaNacimiento as Timestamp).toDate().toLocaleDateString('es-CO');
       this.form.setValue({
         nombres: this._AttentionTracking.nombres,
-        documento: this._AttentionTracking.documento,
-        fechaNacimiento: fechaNacimiento,
-        grado: this._AttentionTracking.grado,
-        edad: this._AttentionTracking.edad,
-        paisOrigen: this._AttentionTracking.paisOrigen,
-        ciudadOrigen: this._AttentionTracking.ciudadOrigen,
-        sexo: this._AttentionTracking.sexo,
-        direccion: this._AttentionTracking.direccionResidencia,
-        barrio: this._AttentionTracking.barrio,
-        correoElectronico: this._AttentionTracking.correoElectronico,
-        telefono: this._AttentionTracking.telefono,
-        eps: this._AttentionTracking.eps,
+        documento: this._AttentionTracking.documento || '',
+        fechaNacimiento: fechaNacimiento || '',
+        grado: this._AttentionTracking.grado || '',
+        edad: this._AttentionTracking.edad || '',
+        paisOrigen: this._AttentionTracking.paisOrigen || '',
+        ciudadOrigen: this._AttentionTracking.ciudadOrigen || '',
+        sexo: this._AttentionTracking.sexo || '',
+        direccion: this._AttentionTracking.direccionResidencia || '',
+        barrio: this._AttentionTracking.barrio || '',
+        correoElectronico: this._AttentionTracking.correoElectronico || '',
+        telefono: this._AttentionTracking.telefono || '',
+        eps: this._AttentionTracking.eps || '',
         viveConPadre: this._AttentionTracking.padre.viveConEstudiante,
         viveConMadre: this._AttentionTracking.madre.viveConEstudiante,
-        estrato: this._AttentionTracking.estrato,
-        sisben: this._AttentionTracking.sisben,
-        nombreAcudiente: this._AttentionTracking.acudiente.nombre,
+        estrato: this._AttentionTracking.estrato || '',
+        sisben: this._AttentionTracking.sisben || '',
+        nombreAcudiente: this._AttentionTracking.acudiente.nombre || '',
         documentoAcudiente: '',
         ocupacionAcudiente: this._AttentionTracking.acudiente.ocupacion,
         telefonoAcudiente: '',
-        lugarTrabajoAcudiente: this._AttentionTracking.acudiente.lugarTrabajo,
-        parentescoAcudiente: this._AttentionTracking.acudiente.parentesco,
-        edadAcudiente: this._AttentionTracking.acudiente.edad,
-        nombrePadre: this._AttentionTracking.padre.nombre,
-        documentoPadre: this._AttentionTracking.padre.documento,
-        nombreMadre: this._AttentionTracking.madre.nombre,
-        documentoMadre: this._AttentionTracking.madre.documento,
+        lugarTrabajoAcudiente: this._AttentionTracking.acudiente.lugarTrabajo || '',
+        parentescoAcudiente: this._AttentionTracking.acudiente.parentesco || '',
+        edadAcudiente: this._AttentionTracking.acudiente.edad || '',
+        nombrePadre: this._AttentionTracking.padre.nombre || '',
+        documentoPadre: this._AttentionTracking.padre.documento || '',
+        nombreMadre: this._AttentionTracking.madre.nombre || '',
+        documentoMadre: this._AttentionTracking.madre.documento || '',
         academico: this._tracking.academicos,
         emocional: this._tracking.emocionales,
         convivencial: this._tracking.conductuales,
         socioFamiliar: this._tracking.socioFamiliar,
-        evaluacion: this._tracking.evaluacion,
+        evaluacion: this._tracking.evaluacion || '',
       });
       this._spinner.hide();
     } catch (error) {

@@ -125,17 +125,17 @@ export class AttentionTrackingFormComponent {
 
   userId = "";
 
-  epsData$ = this._autocompleteDataService.getEpsData();
+  epsData$ = this._autocompleteDataService.getEpsData(getAuth().currentUser?.uid);
 
-  cityData$ = this._autocompleteDataService.getCityData();
+  cityData$ = this._autocompleteDataService.getCitiesData(getAuth().currentUser?.uid);
 
-  countryData$ = this._autocompleteDataService.getCountryData();
+  countryData$ = this._autocompleteDataService.getCountryData(getAuth().currentUser?.uid);
 
-  neighborhoodData$ = this._autocompleteDataService.getNeighborhoodData();
+  neighborhoodData$ = this._autocompleteDataService.getNeighborhoodData(getAuth().currentUser?.uid);
 
-  genders$ = this._autocompleteDataService.getGenderData();
+  genders$ = this._autocompleteDataService.getGendersData(getAuth().currentUser?.uid);
 
-  grades$ = this._autocompleteDataService.getGradeData();
+  grades$ = this._autocompleteDataService.getGradesData(getAuth().currentUser?.uid);
 
   @Input() set id(value: string) {
     if (value) {
