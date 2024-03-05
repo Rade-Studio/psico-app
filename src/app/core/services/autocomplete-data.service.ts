@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, query, where } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, orderBy, query, where } from '@angular/fire/firestore';
 import { Observable, distinctUntilChanged, map, reduce } from 'rxjs';
 import { StudentRecord } from '../models/student-record.model';
 import { CITY_PATH, COUNTRY_PATH, EPS_PATH, GENDER_PATH, GRADES_PATH, NEIGHBORHOOD_PATH } from './attention-tracking.service';
@@ -16,6 +16,7 @@ export class AutocompleteDataService {
     const q = query(
       collectionRef,
       where('userId', '==', userId),
+      orderBy('valor', 'asc'),
     );
 
     return collectionData(q, { idField: 'id' }).pipe(
@@ -28,6 +29,7 @@ export class AutocompleteDataService {
     const q = query(
       collectionRef,
       where('userId', '==', userId),
+      orderBy('valor', 'asc'),
     );
 
     return collectionData(q, { idField: 'id' }).pipe(
@@ -40,6 +42,7 @@ export class AutocompleteDataService {
     const q = query(
       collectionRef,
       where('userId', '==', userId),
+      orderBy('valor', 'asc'),
     );
 
     return collectionData(q, { idField: 'id' }).pipe(
@@ -52,6 +55,7 @@ export class AutocompleteDataService {
     const q = query(
       collectionRef,
       where('userId', '==', userId),
+      orderBy('valor', 'asc'),
     );
 
     return collectionData(q, { idField: 'id' }).pipe(
@@ -64,6 +68,7 @@ export class AutocompleteDataService {
     const q = query(
       collectionRef,
       where('userId', '==', userId),
+      orderBy('valor', 'asc'),
     );
 
     return collectionData(q, { idField: 'id' }).pipe(
@@ -76,6 +81,7 @@ export class AutocompleteDataService {
     const q = query(
       collectionRef,
       where('userId', '==', userId),
+      orderBy('valor', 'asc'),
     );
 
     return collectionData(q, { idField: 'id' }).pipe(

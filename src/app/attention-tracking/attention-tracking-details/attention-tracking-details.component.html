@@ -10,93 +10,71 @@
             <div>
               
               <div class="inputs-block">
-                <div fxLayout="row" fxLayoutGap="10px">
+                <div fxLayout="row" fxLayoutGap="2px">
                   <mat-form-field fxFlex="50%">
                     <mat-label>Estudiante</mat-label>
                     <input matInput type="text" formControlName="nombres" />
                   </mat-form-field>
-                  <mat-form-field fxFlex="25%">
+                  <mat-form-field fxFlex="20%">
                     <mat-label>Documento</mat-label>
                     <input matInput type="text" formControlName="documento"/>
                   </mat-form-field>
-                  <mat-form-field fxFlex="25%">
+                  <mat-form-field fxFlex="10%">
                     <mat-label>Grado</mat-label>
                     <input matInput type="text" formControlName="grado"/>
                   </mat-form-field>
-                </div>
-  
-                <div fxLayout="row" fxLayoutGap="10px">
-                  <mat-form-field fxFlex="15%">
+                  <mat-form-field fxFlex="20%">
                     <mat-label>Fecha Nacimiento</mat-label>
                     <input matInput type="text" formControlName="fechaNacimiento" />
                   </mat-form-field>
-                  <mat-form-field fxFlex="15%">
-                    <mat-label>Edad</mat-label>
-                    <input matInput type="text" formControlName="edad"/>
-                  </mat-form-field>
-                  <mat-form-field fxFlex="15%">
+                </div>
+  
+                <div fxLayout="row" fxLayoutGap="2px">
+                  <mat-form-field fxFlex="17%">
                     <mat-label>Sexo</mat-label>
                     <input matInput type="text" formControlName="sexo"/>
                   </mat-form-field>
-                  <mat-form-field fxFlex="33%">
+                  <mat-form-field fxFlex="18%">
                     <mat-label>Pais Origen</mat-label>
                     <input matInput type="text" formControlName="paisOrigen" />
                   </mat-form-field>
-                  <mat-form-field fxFlex="33%">
+                  <mat-form-field fxFlex="20%">
                     <mat-label>Ciudad Origen</mat-label>
                     <input matInput type="text" formControlName="ciudadOrigen" />
-                  </mat-form-field>
-                </div>
-  
-                <div fxLayout="row" fxLayoutGap="10px">
-                  <mat-form-field fxFlex="30%">
-                    <mat-label>Direccion Residencia</mat-label>
-                    <input matInput type="text" formControlName="direccion" />
                   </mat-form-field>
                   <mat-form-field fxFlex="20%">
                     <mat-label>Barrio</mat-label>
                     <input matInput type="text" formControlName="barrio"/>
                   </mat-form-field>
-                  <mat-form-field fxFlex="50%">
-                    <mat-label>Correo Electronico</mat-label>
-                    <input matInput type="text" formControlName="correoElectronico" />
-                  </mat-form-field>
-                </div>
-
-                <div fxLayout="row" fxLayoutGap="10px">
-                  <mat-form-field fxFlex="30%">
-                    <mat-label>Telefono</mat-label>
-                    <input matInput type="text" formControlName="telefono"/>
-                  </mat-form-field>
-                  <mat-form-field fxFlex="70%">
+                  <mat-form-field fxFlex="25%">
                     <mat-label>EPS</mat-label>
                     <input matInput type="text" formControlName="eps" />
                   </mat-form-field>
                 </div>
   
-                <div fxLayout="row" fxLayoutGap="10px">
-                </div>
-  
-                <div fxLayout="row" fxLayoutGap="10px">
-                </div>
-  
-                <div fxLayout="row" fxLayoutGap="10px">
-                </div>
-  
-                <div fxLayout="row" fxLayoutGap="10px">
-                  <p fxFlex="60%">
-                    <mat-checkbox formControlName="viveConMadre">¿Vive con la Madre?</mat-checkbox>
-                  </p>
-                  <p fxFlex="40%">
-                    <mat-checkbox formControlName="viveConPadre">¿Vive con el Padre?</mat-checkbox>
-                  </p>
+                <div fxLayout="row" fxLayoutGap="2px">
+                  <mat-form-field fxFlex="30%">
+                    <mat-label>Direccion Residencia</mat-label>
+                    <input matInput type="text" formControlName="direccion" />
+                  </mat-form-field>
+                  <mat-form-field fxFlex="40%">
+                    <mat-label>Correo Electronico</mat-label>
+                    <input matInput type="text" formControlName="correoElectronico" />
+                  </mat-form-field>
+                  <mat-form-field fxFlex="20%">
+                    <mat-label>Telefono</mat-label>
+                    <input matInput type="text" formControlName="telefono"/>
+                  </mat-form-field>
+                  <mat-form-field fxFlex="10%">
+                    <mat-label>Edad</mat-label>
+                    <input matInput type="text" formControlName="edad"/>
+                  </mat-form-field>
                 </div>
               </div>
 
               <div class="inputs-block">
                 
-                <h3>ACUDIENTE</h3>
-                <div fxLayout="row" fxLayoutGap="10px">
+                <div fxLayout="row" fxLayoutGap="2px">
                   <mat-form-field fxFlex="50%">
                     <mat-label>Acudiente</mat-label>
                     <input matInput type="text" formControlName="nombreAcudiente" />
@@ -111,7 +89,7 @@
                   </mat-form-field>
                 </div>
   
-                <div fxLayout="row" fxLayoutGap="10px">
+                <div fxLayout="row" fxLayoutGap="2px">
                   <mat-form-field fxFlex="33%">
                     <mat-label>Ocupacion</mat-label>
                     <input matInput type="text" formControlName="ocupacionAcudiente" />
@@ -125,33 +103,38 @@
                     <input matInput type="text" formControlName="edadAcudiente" />
                   </mat-form-field>
                 </div>
-  
-                <h3>PADRES DE FAMILIA</h3>
-                <div fxLayout="row" fxLayoutGap="10px">
-                  <mat-form-field fxFlex="65%">
+
+                <div fxLayout="row" fxLayoutGap="2px">
+                  <mat-form-field fxFlex="50%">
                     <mat-label>Padre</mat-label>
                     <input matInput type="text" formControlName="nombrePadre" />
                   </mat-form-field>
-                  <mat-form-field fxFlex="35%">
+                  <mat-form-field fxFlex="30%">
                     <mat-label>Documento</mat-label>
                     <input matInput type="text" formControlName="documentoPadre"/>
                   </mat-form-field>
+                  <p fxFlex="20%">
+                    <mat-checkbox formControlName="viveConPadre">¿Vive con el Padre?</mat-checkbox>
+                  </p>
                 </div>
   
-                <div fxLayout="row" fxLayoutGap="10px">
-                  <mat-form-field fxFlex="65%">
+                <div fxLayout="row" fxLayoutGap="2px">
+                  <mat-form-field fxFlex="50%">
                     <mat-label>Madre</mat-label>
                     <input matInput type="text" formControlName="nombreMadre" />
                   </mat-form-field>
-                  <mat-form-field fxFlex="35%">
+                  <mat-form-field fxFlex="30%">
                     <mat-label>Documento</mat-label>
                     <input matInput type="text" formControlName="documentoMadre"/>
                   </mat-form-field>
+                  <p fxFlex="20%">
+                    <mat-checkbox formControlName="viveConMadre">¿Vive con la Madre?</mat-checkbox>
+                  </p>
                 </div>
   
                 
                 <h3>ATENCION Y SEGUIMIENTO</h3>
-                <div fxLayout="row" fxLayoutGap="10px">
+                <div fxLayout="row" fxLayoutGap="2px">
                   
                   <p fxFlex="25%">
                     <mat-checkbox formControlName="academico">Academico</mat-checkbox>
@@ -167,7 +150,7 @@
                   </p>
                 </div>
 
-                <div fxLayout="row" fxLayoutGap="10px">
+                <div fxLayout="row" fxLayoutGap="2px">
                   <mat-form-field fxFlex="100%">
                     <mat-label>EVALUACION</mat-label>
                     <textarea matInput formControlName="evaluacion" rows="5"></textarea>
@@ -178,11 +161,11 @@
 
             </div>
         </mat-card-content>
-        <mat-card-actions fxFlex="100%" >
+        <mat-card-actions >
           <div fxLayoutGap="10px">
             <h4>FIRMA: </h4>
             <mat-form-field class="block-sign" fxFlex="100%">
-              <input type="text" matInput class="input-sign"/>
+              <input type="text" matInput class="input-sign" disabled/>
             </mat-form-field>
           </div>
         </mat-card-actions>

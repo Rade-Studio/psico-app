@@ -53,7 +53,11 @@ export interface CreateAttentionTrackingForm {
   estadoSalud: FormGroup;
   seguimientoEducativos: FormGroup;
   seguimientoComportamental: FormGroup;
-  eliminado: boolean
+  eliminado: boolean,
+  fechaActualizacion: Date;
+  reverseSearchTokens?: string[];
+  fechaCreacion: Date;
+  userId: string;
 }
 
 export const DATE_FORMAT = {
@@ -99,7 +103,7 @@ export const DATE_FORMAT = {
   styleUrl: './attention-tracking-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AttentionTrackingFormComponent {
+export class AttentionTrackingFormComponent implements OnInit {
 
   private _formBuilder = inject(FormBuilder).nonNullable;
 
@@ -120,6 +124,8 @@ export class AttentionTrackingFormComponent {
   trackingList$ = new Observable<TrackingForm[]>();
 
   panelOpenState = true;
+
+  form: FormGroup;
 
   trackingTabIsDisabled = true;
 
@@ -144,99 +150,16 @@ export class AttentionTrackingFormComponent {
     }
   }
 
-  form = this._formBuilder.group<CreateAttentionTrackingForm>({
-    nombres: this._formBuilder.control('', Validators.required),
-    documento: this._formBuilder.control('', Validators.required),
-    grado: this._formBuilder.control('', Validators.required),
-    sexo: this._formBuilder.control('', Validators.required),
-    edad: this._formBuilder.control('', Validators.required),
-    sisben: this._formBuilder.control(''),
-    fechaNacimiento: this._formBuilder.control(undefined, Validators.required),
-    ciudadOrigen: this._formBuilder.control('', Validators.required),
-    paisOrigen: this._formBuilder.control('', Validators.required),
-    direccionResidencia: this._formBuilder.control(''),
-    barrio: this._formBuilder.control(''),
-    telefono: this._formBuilder.control('', Validators.required),
-    estrato: this._formBuilder.control('', Validators.required),
-    correoElectronico: this._formBuilder.control('', [Validators.email]),
-    eps: this._formBuilder.control(''),
-    acudiente: this._formBuilder.group({
-      nombre: new FormControl(''),
-      ocupacion: new FormControl(''),
-      lugarTrabajo: new FormControl(''),
-      edad: new FormControl(''),
-      parentesco: new FormControl('')
-    }),
-    padre: this._formBuilder.group({
-      nombre: new FormControl(''),
-      documento: new FormControl(''),
-      ocupacion: new FormControl(''),
-      telefono: new FormControl(''),
-      viveConEstudiante: false,
-    }),
-    madre: this._formBuilder.group({
-      nombre: new FormControl(''),
-      documento: new FormControl(''),
-      ocupacion: new FormControl(''),
-      telefono: new FormControl(''),
-      viveConEstudiante: false,
-    }),
-    caracteristicasPersonalidad: this._formBuilder.group({
-      gradoActividad: new FormControl(''),
-      sentidoRespeto: new FormControl(''),
-      gradoTolerancia: new FormControl(''),
-      gradoSociabilidad: new FormControl(''),
-      gradoEmotividad: new FormControl(''),
-      principioAutoridad: new FormControl(''),
-      aceptacionErrores: new FormControl(''),
-      manejoAgresion: new FormControl(''),
-      sentidoResponsabilidad: new FormControl(''),
-      aceptacionOrientacion: new FormControl(''),
-      sentidoPertenencia: new FormControl(''),
-      aceptacionGrupal: new FormControl(''),
-      nivelExtroversion: new FormControl(''),
-      gradoColaboracion: new FormControl(''),
-    }),
-    estadoSalud: this._formBuilder.group({
-      desmayos: false,
-      insomnio: false,
-      convulsiones: false,
-      nerviosismo: false,
-      alergias: false,
-      gripasFrecuentes: false,
-      otitis: false,
-      colicos: false,
-      cefaleas: false,
-      asma: false,
-      medicamentos: new FormControl(''),
-    }),
-    seguimientoEducativos: this._formBuilder.group({
-      areasPreferencias: new FormControl(''),
-      areasNoPreferidas: new FormControl(''),
-      preferenciasVocacionales: new FormControl(''),
-    }),
-    seguimientoComportamental: this._formBuilder.group({
-      tratoAfectuoso: new FormControl(false),
-      puntualidad: new FormControl(false),
-      participacion: new FormControl(false),
-      asertividad: new FormControl(false),
-      tolerancia: new FormControl(false),
-      respeto: new FormControl(false),
-      presentacionPersonal: new FormControl(false),
-      empatia: new FormControl(false),
-      colaboracion: new FormControl(false),
-      problemasResueltos: new FormControl(''),
-    }),
-    eliminado: false
-  });
-
   constructor() { 
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        this.userId = user.uid;
-      }
-    });
+    this.form = this.buildForm();
+  }
+
+  ngOnInit(): void {
+    this.getUserId();
+  }
+
+  async getUserId(): Promise<void> {
+    this.userId = getAuth().currentUser?.uid as string;
   }
 
   async createOrUpdateAttentionTracking() {
@@ -249,17 +172,11 @@ export class AttentionTrackingFormComponent {
       this._spinner.show();
       if (!this._attentionTrackingId) {
         const doc = await this.createAttentionTracking();
-
-        const snackBarRef = this.openSnackBar('Registro creado exitosamente. ✅');
-        snackBarRef.afterDismissed().subscribe(() => {
-          this._router.navigate(['/attention-tracking/edit', doc.id]);
-          
-          this._spinner.hide();
-        })
+        this.handleCreateSuccess(doc.id);
       } else {
         await this.updateAttentionTracking();
         this.openSnackBar('Registro actualizado exitosamente. ✅');
-
+        
         this._spinner.hide();
       }
     } catch (error) {
@@ -269,121 +186,56 @@ export class AttentionTrackingFormComponent {
 
   async updateAttentionTracking() {
     const dataForm = this.form.value as StudentRecordForm;
-    const attentionTracking = this._dataMutatorService.convertDataToLowerCase(dataForm) as StudentRecordForm;
-    attentionTracking.fechaActualizacion = new Date();
-    attentionTracking.fechaNacimiento = new Date(dataForm.fechaNacimiento as Date)
+    dataForm.fechaActualizacion = new Date();
+    dataForm.fechaNacimiento = new Date(dataForm.fechaNacimiento as Date)
 
-    await this._attentionTrackingService.updateAttentionTracking(this._attentionTrackingId, attentionTracking);
+    await this._attentionTrackingService.updateAttentionTracking(this._attentionTrackingId, dataForm);
   }
 
   async createAttentionTracking() {
-    const dataForm = this.form.value as StudentRecordForm;
-    const attentionTracking = this._dataMutatorService.convertDataToLowerCase(dataForm) as StudentRecordForm;
-    attentionTracking.fechaCreacion = new Date();
-    attentionTracking.fechaActualizacion = new Date();
-    attentionTracking.userId = this.userId;
-    attentionTracking.fechaNacimiento = new Date(dataForm.fechaNacimiento as Date)
-    attentionTracking.eliminado = false;
+    const attentionTracking = this.getDataForm();
     const doc = await this._attentionTrackingService.createAttentionTracking(attentionTracking);
     return doc;
   }
 
+  handleCreateSuccess(attentionTrackingId): void {
+    const snackBarRef = this.openSnackBar('Registro creado exitosamente. ✅');
+    snackBarRef.afterOpened().subscribe(() => {
+      this._router.navigate(['/attention-tracking/edit', attentionTrackingId]);
+      this._spinner.hide();
+    });
+  }
+
+  getDataForm(): StudentRecordForm {
+    const dataForm = this.form.value as StudentRecordForm
+    return dataForm;
+  }
+
+  prepareDataForUpdate(dataForm: StudentRecordForm, fechaNacimiento: Date): StudentRecordForm {
+    this.trackingList$ = this._attentionTrackingService.getAllTracking(this._attentionTrackingId);
+
+    return {
+      ...dataForm,
+      fechaNacimiento: fechaNacimiento
+    }
+  }
+
   private async setFormValue(id: string) {
     try {
+
       this._spinner.show();
       this.trackingList$ = await this._attentionTrackingService.getAllTracking(id);
       const data = await this._attentionTrackingService.getAttentionTrackingById(id);
       const fechaNacimiento = (data.fechaNacimiento as Timestamp).toDate();
       const attentionTracking = this._dataMutatorService.convertDataToTitleCase(data) as StudentRecordForm;
-      this.form.setValue({
-        nombres: attentionTracking.nombres,
-        documento: attentionTracking.documento || '',
-        grado: attentionTracking.grado || '',
-        sexo: attentionTracking.sexo || '',
-        edad: attentionTracking.edad || '',
-        sisben: attentionTracking.sisben || '',
-        fechaNacimiento: fechaNacimiento || new Date(),
-        ciudadOrigen: attentionTracking.ciudadOrigen || '',
-        paisOrigen: attentionTracking.paisOrigen || '',
-        direccionResidencia: attentionTracking.direccionResidencia || '',
-        barrio: attentionTracking.barrio || '',
-        telefono: attentionTracking.telefono || '',
-        estrato: attentionTracking.estrato || '',
-        correoElectronico: attentionTracking.correoElectronico || '',
-        eps: attentionTracking.eps || '',
-        acudiente: {
-          nombre: attentionTracking.acudiente.nombre || '',
-          ocupacion: attentionTracking.acudiente.ocupacion || '',
-          lugarTrabajo: attentionTracking.acudiente.lugarTrabajo || '',
-          edad: attentionTracking.acudiente.edad || '',
-          parentesco: attentionTracking.acudiente.parentesco || ''
-        },
-        padre: {
-          nombre: attentionTracking.padre.nombre || '',
-          documento: attentionTracking.padre.documento || '',
-          ocupacion: attentionTracking.padre.ocupacion || '',
-          telefono: attentionTracking.padre.telefono || '',
-          viveConEstudiante: attentionTracking.padre.viveConEstudiante || false,
-        },
-        madre: {
-          nombre: attentionTracking.madre.nombre || '',
-          documento: attentionTracking.madre.documento || '',
-          ocupacion: attentionTracking.madre.ocupacion || '',
-          telefono: attentionTracking.madre.telefono || '',
-          viveConEstudiante: attentionTracking.madre.viveConEstudiante || false,
-        },
-        caracteristicasPersonalidad: {
-          gradoActividad: attentionTracking.caracteristicasPersonalidad.gradoActividad || '',
-          sentidoRespeto: attentionTracking.caracteristicasPersonalidad.sentidoRespeto || '',
-          gradoTolerancia: attentionTracking.caracteristicasPersonalidad.gradoTolerancia || '',
-          gradoSociabilidad: attentionTracking.caracteristicasPersonalidad.gradoSociabilidad || '',
-          gradoEmotividad: attentionTracking.caracteristicasPersonalidad.gradoEmotividad || '',
-          principioAutoridad: attentionTracking.caracteristicasPersonalidad.principioAutoridad || '',
-          aceptacionErrores: attentionTracking.caracteristicasPersonalidad.aceptacionErrores || '',
-          manejoAgresion: attentionTracking.caracteristicasPersonalidad.manejoAgresion || '',
-          sentidoResponsabilidad: attentionTracking.caracteristicasPersonalidad.sentidoResponsabilidad || '',
-          aceptacionOrientacion: attentionTracking.caracteristicasPersonalidad.aceptacionOrientacion || '',
-          sentidoPertenencia: attentionTracking.caracteristicasPersonalidad.sentidoPertenencia || '',
-          aceptacionGrupal: attentionTracking.caracteristicasPersonalidad.aceptacionGrupal || '',
-          nivelExtroversion: attentionTracking.caracteristicasPersonalidad.nivelExtroversion || '',
-          gradoColaboracion: attentionTracking.caracteristicasPersonalidad.gradoColaboracion || '',
-        },
-        estadoSalud: {
-          desmayos: attentionTracking.estadoSalud.desmayos || false,
-          insomnio: attentionTracking.estadoSalud.insomnio || false,
-          convulsiones: attentionTracking.estadoSalud.convulsiones || false,
-          nerviosismo: attentionTracking.estadoSalud.nerviosismo || false,
-          alergias: attentionTracking.estadoSalud.alergias || false,
-          gripasFrecuentes: attentionTracking.estadoSalud.gripasFrecuentes || false,
-          otitis: attentionTracking.estadoSalud.otitis || false,
-          colicos: attentionTracking.estadoSalud.colicos || false,
-          cefaleas: attentionTracking.estadoSalud.cefaleas || false,
-          asma: attentionTracking.estadoSalud.asma || false,
-          medicamentos: attentionTracking.estadoSalud.medicamentos || '',
-        },
-        seguimientoEducativos: {
-          areasPreferencias: attentionTracking.seguimientoEducativos.areasPreferencias || '',
-          areasNoPreferidas: attentionTracking.seguimientoEducativos.areasNoPreferidas || '',
-          preferenciasVocacionales: attentionTracking.seguimientoEducativos.preferenciasVocacionales || '',
-        },
-        seguimientoComportamental: {
-          tratoAfectuoso: attentionTracking.seguimientoComportamental.tratoAfectuoso || false,
-          puntualidad: attentionTracking.seguimientoComportamental.puntualidad || false,
-          participacion: attentionTracking.seguimientoComportamental.participacion || false,
-          asertividad: attentionTracking.seguimientoComportamental.asertividad || false,
-          tolerancia: attentionTracking.seguimientoComportamental.tolerancia || false,
-          respeto: attentionTracking.seguimientoComportamental.respeto || false,
-          presentacionPersonal: attentionTracking.seguimientoComportamental.presentacionPersonal || false,
-          empatia: attentionTracking.seguimientoComportamental.empatia || false,
-          colaboracion: attentionTracking.seguimientoComportamental.colaboracion || false,
-          problemasResueltos: attentionTracking.seguimientoComportamental.problemasResueltos || '',
-        },
-        eliminado: attentionTracking.eliminado || false
-      })
+
+      this.form.setValue(this.prepareDataForUpdate(data, fechaNacimiento));
       this.trackingTabIsDisabled = false;
-      this._spinner.hide();
+
     } catch (error) {
       console.error('Error getting attention tracking:', error);
+    } finally {
+      this._spinner.hide();
     }
   }
 
@@ -401,10 +253,140 @@ export class AttentionTrackingFormComponent {
     })
   }
 
+  
+
+  buildForm(): FormGroup {
+
+    const personalDataGroup = this._formBuilder.group({
+      nombres: ['', Validators.required],
+      documento: ['', Validators.required],
+      grado: ['', Validators.required],
+      sexo: ['', Validators.required],
+      edad: ['', Validators.required],
+      sisben: [''],
+      fechaNacimiento: [undefined, Validators.required],
+      ciudadOrigen: ['', Validators.required],
+      paisOrigen: ['', Validators.required],
+    });
+
+    const contactDataGroup = this._formBuilder.group({
+      direccionResidencia: [''],
+      barrio: [''],
+      telefono: ['', Validators.required],
+      estrato: ['', Validators.required],
+      correoElectronico: ['', Validators.email],
+      eps: [''],
+    });
+
+    const acudiente = this._formBuilder.group({
+      nombre: [''],
+      ocupacion: [''],
+      lugarTrabajo: [''],
+      edad: [''],
+      parentesco: ['']
+    });
+
+    const padre = this._formBuilder.group({
+      nombre: [''],
+      documento: [''],
+      ocupacion: [''],
+      telefono: [''],
+      viveConEstudiante: false,
+    });
+
+    const madre = this._formBuilder.group({
+      nombre: [''],
+      documento: [''],
+      ocupacion: [''],
+      telefono: [''],
+      viveConEstudiante: false,
+    });
+
+    const personalityDataGroup = this._formBuilder.group({
+      gradoActividad: [''],
+      sentidoRespeto: [''],
+      gradoTolerancia: [''],
+      gradoSociabilidad: [''],
+      gradoEmotividad: [''],
+      principioAutoridad: [''],
+      aceptacionErrores: [''],
+      manejoAgresion: [''],
+      sentidoResponsabilidad: [''],
+      aceptacionOrientacion: [''],
+      sentidoPertenencia: [''],
+      aceptacionGrupal: [''],
+      nivelExtroversion: [''],
+      gradoColaboracion: [''],
+    });
+
+    const healthDataGroup = this._formBuilder.group({
+      desmayos: false,
+      insomnio: false,
+      convulsiones: false,
+      nerviosismo: false,
+      alergias: false,
+      gripasFrecuentes: false,
+      otitis: false,
+      colicos: false,
+      cefaleas: false,
+      asma: false,
+      medicamentos: [''],
+    });
+
+    const seguimientoEducativos = this._formBuilder.group({
+      areasPreferencias: [''],
+      areasNoPreferidas: [''],
+      preferenciasVocacionales: [''],
+    });
+
+    const seguimientoComportamental = this._formBuilder.group({
+      tratoAfectuoso: false,
+      puntualidad: false,
+      participacion: false,
+      asertividad: false,
+      tolerancia: false,
+      respeto: false,
+      presentacionPersonal: false,
+      empatia: false,
+      colaboracion: false,
+      problemasResueltos: [''],
+    });
+
+    return this._formBuilder.group<CreateAttentionTrackingForm>({
+      nombres: personalDataGroup.controls.nombres,
+      documento: personalDataGroup.controls.documento,
+      grado: personalDataGroup.controls.grado,
+      sexo: personalDataGroup.controls.sexo,
+      edad: personalDataGroup.controls.edad,
+      sisben: personalDataGroup.controls.sisben,
+      fechaNacimiento: personalDataGroup.controls.fechaNacimiento,
+      ciudadOrigen: personalDataGroup.controls.ciudadOrigen,
+      paisOrigen: personalDataGroup.controls.paisOrigen,
+      direccionResidencia: contactDataGroup.controls.direccionResidencia,
+      barrio: contactDataGroup.controls.barrio,
+      telefono: contactDataGroup.controls.telefono,
+      estrato: contactDataGroup.controls.estrato,
+      correoElectronico: contactDataGroup.controls.correoElectronico,
+      eps: contactDataGroup.controls.eps,
+      acudiente: acudiente,
+      padre: padre,
+      madre: madre,
+      caracteristicasPersonalidad: personalityDataGroup,
+      estadoSalud: healthDataGroup,
+      seguimientoEducativos: seguimientoEducativos,
+      seguimientoComportamental: seguimientoComportamental,
+      eliminado: false,
+      fechaActualizacion: new Date(),
+      fechaCreacion: new Date(),
+      userId: getAuth().currentUser?.uid as string,
+      reverseSearchTokens: [],
+    });
+  }
+
   calcAge(event: any) {
     const date = new Date(event.value);
     const today = new Date();
     const edadMiliseconds = today.getTime() - date.getTime();
-    this.form.controls.edad.setValue(Math.floor((edadMiliseconds / (1000 * 60 * 60 * 24 * 365.25))).toString());
+    this.form.controls['edad'].setValue(Math.floor((edadMiliseconds / (1000 * 60 * 60 * 24 * 365.25))).toString());
   }
 }

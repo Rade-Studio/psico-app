@@ -8,16 +8,25 @@ export class DataMutatatorService {
   constructor() { }
 
   private convertToLowerCase(obj: any): any {
+    
+    const wordsExceptions = ['correoElectronico', 'grado', 'userId', 'id', 'fechaCreacion', 'fechaActualizacion', 'eliminado', 'barrio']
+
+    if (obj === null || obj === undefined) {
+      return obj;
+    }
+
     if (typeof obj === 'string') {
       return obj.toLowerCase();
     }
+
     if (Array.isArray(obj)) {
       return obj.map(item => this.convertToLowerCase(item));
     }
+
     if (typeof obj === 'object') {
       const convertedObj = {};
       for (const key in obj) {
-        if (obj.hasOwnProperty(key)) {
+        if (obj.hasOwnProperty(key) && !wordsExceptions.includes(key)) {
           convertedObj[key] = this.convertToLowerCase(obj[key]);
         }
       }

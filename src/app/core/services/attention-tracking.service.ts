@@ -36,25 +36,26 @@ export class AttentionTrackingService {
     return collectionData(q, { idField: 'id' }) as Observable<StudentRecord[]>;
   }
 
-  createAttentionTracking(attentionTracking: 
+  async createAttentionTracking(attentionTracking: 
     StudentRecordForm) {
       attentionTracking.reverseSearchTokens = this.generateReverseSearchTokens(attentionTracking.nombres);
-      this.saveAllIfNoExists(attentionTracking);
+      await this.saveAllIfNoExists(attentionTracking);
       return addDoc(this._collection, attentionTracking);
   }
 
-  async createManyAttentionTracking(attentionTracking: any[]) {
+  createManyAttentionTracking(attentionTracking: any[]) {
     attentionTracking.forEach(element => {
       this.saveAllIfNoExists(element);
+      console.log(element);
       return addDoc(this._collection, element);
     });
   }
 
-  updateAttentionTracking(id: string, studentRecord: StudentRecordForm) {
+  async updateAttentionTracking(id: string, studentRecord: StudentRecordForm) {
     try {
       const document = doc(this._firestore, PATH, id);
       studentRecord.reverseSearchTokens = this.generateReverseSearchTokens(studentRecord.nombres);
-      this.saveAllIfNoExists(studentRecord);
+      await this.saveAllIfNoExists(studentRecord);
       return updateDoc(document, { ...studentRecord });
     } catch (error) {
       console.error('Error updating document:', error);
@@ -219,13 +220,20 @@ export class AttentionTrackingService {
 
   // Guardar generico si no existe en la coleccion
   async saveIfNotExists(collectionPath: string, data: { valor: string, userId: string }) {
+
+    if (!data.valor && data.valor === "") return;
+
+    console.log(data);
+
     const q = query(
       collection(this._firestore, collectionPath),
       where('valor', '==', data.valor),
-      where('userId', '==', data.userId)
+      where('userId', '==', data.userId),
     );
     const snapshot = await getDocs(q);
+    console.log(snapshot);
     if (snapshot.empty) {
+      console.warn('Guardando', data.valor);
       addDoc(collection(this._firestore, collectionPath), data);
     }
   }
