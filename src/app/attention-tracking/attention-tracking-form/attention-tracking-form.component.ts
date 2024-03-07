@@ -227,7 +227,6 @@ export class AttentionTrackingFormComponent implements OnInit {
       this.trackingList$ = await this._attentionTrackingService.getAllTracking(id);
       const data = await this._attentionTrackingService.getAttentionTrackingById(id);
       const fechaNacimiento = (data.fechaNacimiento as Timestamp).toDate();
-      const attentionTracking = this._dataMutatorService.convertDataToTitleCase(data) as StudentRecordForm;
 
       this.form.setValue(this.prepareDataForUpdate(data, fechaNacimiento));
       this.trackingTabIsDisabled = false;
@@ -283,7 +282,8 @@ export class AttentionTrackingFormComponent implements OnInit {
       ocupacion: [''],
       lugarTrabajo: [''],
       edad: [''],
-      parentesco: ['']
+      parentesco: [''],
+      telefono: [''],
     });
 
     const padre = this._formBuilder.group({

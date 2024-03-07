@@ -17,6 +17,7 @@ import { AuthService } from '../core/services/auth.service';
 import { AttentionTrackingService } from '../core/services/attention-tracking.service';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-home',
@@ -42,11 +43,14 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
+
   authStateObs$ = () => inject(AuthService).authState$;
+
+  private _spinner = inject(NgxSpinnerService);
 
   _attentionTrackingService = inject(AttentionTrackingService);
 
-  private _spinner = inject(NgxSpinnerService);
+  private _snackBar = inject(MatSnackBar);
 
   attentionTracking$ = new BehaviorSubject<StudentRecord[]>([]);
 
@@ -55,7 +59,10 @@ export class HomeComponent implements OnInit {
   userId = '';
 
   private recordsSpinner = 'recordListSpinner';
+
   private loading = false;
+
+  private totalRecord = 0;
 
   constructor() {
   };
@@ -76,20 +83,31 @@ export class HomeComponent implements OnInit {
   }
 
   onScroll(ev) {
-    console.log(ev);
     this._spinner.show(this.recordsSpinner);
     this.loading = true;
 
+    if (this.totalRecord >= 150) {
+      this._spinner.hide(this.recordsSpinner);
+      this.loading = false;
+      this._snackBar.open("Has alcanzado el limite de carga, recuerda que puedes filtrar por el nombre del estudiante.", 'Cerrar', {
+        duration: 20000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center'
+      })
+      return;
+    }
+
     // Obtener ultimo registro del observable para luego traer a partir de ese en el servicio y concatenarlo con los actuales que tenemos dentro del observable
-    this._attentionTrackingService.getAllAttentionTracking(this.userId, this.lastRecord).subscribe((data) => {
+    this._attentionTrackingService.getAllAttentionTracking(this.userId, this.lastRecord)
+      .subscribe((data) => {
       this.attentionTracking$.next(this.attentionTracking$.getValue().concat(data));
+      this.totalRecord += data.length;
       this.lastRecord = data[data.length - 1];
       this._spinner.hide(this.recordsSpinner);
       this.loading = false;
     });
-
     
-}
+  }
 
   async searchByQuery(name: string) {
     if (!name) {

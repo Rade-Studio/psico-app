@@ -43,10 +43,9 @@ export class AttentionTrackingService {
       return addDoc(this._collection, attentionTracking);
   }
 
-  createManyAttentionTracking(attentionTracking: any[]) {
-    attentionTracking.forEach(element => {
-      this.saveAllIfNoExists(element);
-      console.log(element);
+  async createManyAttentionTracking(attentionTracking: StudentRecordForm[]) {
+    attentionTracking.forEach(async element => {
+      // await this.saveAllIfNoExists(element);
       return addDoc(this._collection, element);
     });
   }
@@ -68,11 +67,11 @@ export class AttentionTrackingService {
     let q;
 
     if (lastAttentionTracking) {
-      console.log(lastAttentionTracking);
       q = query(
         this._collection, 
         where('userId', '==', userId),
         where('eliminado', '==', false),
+        orderBy('fechaActualizacion', 'desc'),
         orderBy('nombres', 'asc'),
         startAfter(lastAttentionTracking.nombres),
         limit(10)
@@ -82,6 +81,7 @@ export class AttentionTrackingService {
         this._collection, 
         where('userId', '==', userId),
         where('eliminado', '==', false),
+        orderBy('fechaActualizacion', 'desc'),
         orderBy('nombres', 'asc'),
         limit(10)
       );
@@ -223,17 +223,13 @@ export class AttentionTrackingService {
 
     if (!data.valor && data.valor === "") return;
 
-    console.log(data);
-
     const q = query(
       collection(this._firestore, collectionPath),
       where('valor', '==', data.valor),
       where('userId', '==', data.userId),
     );
     const snapshot = await getDocs(q);
-    console.log(snapshot);
     if (snapshot.empty) {
-      console.warn('Guardando', data.valor);
       addDoc(collection(this._firestore, collectionPath), data);
     }
   }

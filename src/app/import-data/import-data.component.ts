@@ -45,34 +45,31 @@ export class ImportDataComponent {
             paisOrigen: (record[7] as string).toLowerCase().trim(),
             direccionResidencia: (record[8] as string).toLowerCase().trim(),
             barrio: (record[9] as string).toLowerCase().trim(),
-            telefono: (record[10] as string).toLowerCase().trim(),
-            correoElectronico: (record[11] as string).toLowerCase().trim(),
-            estrato: (record[12] as string).toLowerCase().trim(),
-            eps: (record[13] as string).toLowerCase().trim(),
-            sisben: (record[14] as string).toLowerCase().trim(),
+            telefono: (record[11] as string).toLowerCase().trim(),
+            correoElectronico: (record[12] as string).toLowerCase().trim(),
+            estrato: (record[13] as string).toLowerCase().trim(),
+            eps: (record[14] as string).toLowerCase().trim(),
+            sisben: (record[15] as string).toLowerCase().trim(),
             acudiente: {
-              nombres: (record[16] as string).toLowerCase().trim(),
+              nombre: (record[16] as string).toLowerCase().trim(),
               edad: (record[17] as string).toLowerCase().trim(),
-              documento: (record[18] as string).toLowerCase().trim(),
               telefono: (record[19] as string).toLowerCase().trim(),
               parentesco: (record[20] as string).toLowerCase().trim(),
               ocupacion: (record[21] as string).toLowerCase().trim(),
               lugarTrabajo: (record[22] as string).toLowerCase().trim(),
             },            
             padre: {
-              nombres: (record[23] as string).toLowerCase().trim(),
+              nombre: (record[23] as string).toLowerCase().trim(),
               documento: (record[24] as string).toLowerCase().trim(),
               viveConEstudiante: (record[25] as string).toLowerCase().trim() === 'si',
               ocupacion: '',
-              lugarTrabajo: '',
               telefono: '',
             },
             madre: {
-              nombres: (record[26] as string).toLowerCase().trim(),
+              nombre: (record[26] as string).toLowerCase().trim(),
               documento: (record[27] as string).toLowerCase().trim(),
               viveConEstudiante: (record[28] as string).toLowerCase().trim() === 'si',
               ocupacion: '',
-              lugarTrabajo: '',
               telefono: '',
             },
             caracteristicasPersonalidad: {
@@ -110,16 +107,16 @@ export class ImportDataComponent {
               preferenciasVocacionales: '',
             },
             seguimientoComportamental: {
-              tratoAfectuoso: false,
-              puntualidad: false,
-              participacion: false,
-              asertividad: false,
-              tolerancia: false,
-              respeto: false,
-              presentacionPersonal: false,
-              empatia: false,
-              colaboracion: false,
-              problemasResueltos: false,
+              tratoAfectuoso: '',
+              puntualidad: '',
+              participacion: '',
+              asertividad: '',
+              tolerancia: '',
+              respeto: '',
+              presentacionPersonal: '',
+              empatia: '',
+              colaboracion: '',
+              problemasResueltos: '',
             },
             userId: record[29],
             fechaActualizacion: new Date(),
@@ -127,6 +124,8 @@ export class ImportDataComponent {
             eliminado: false,
           };
         });
+
+        console.log('Guardando registros: ' + models.length)
 
         this._attentionTrackingService.createManyAttentionTracking(models);
 

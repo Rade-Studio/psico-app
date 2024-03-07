@@ -218,25 +218,29 @@
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content fxLayout fxLayout="row wrap" fxLayoutGap="20px grid">
-                                <mat-form-field fxFlex="20%" fxFlex.sm="50" fxFlex.xs="100%">
+                                <mat-form-field fxFlex="20%" fxFlex.sm="50%" fxFlex.xs="100%">
                                     <mat-label>Nombres del Acudiente</mat-label>
                                     <input matInput formControlName="nombre" placeholder="Nombres y Apellidos">
                                 </mat-form-field>
-                                <mat-form-field fxFlex="20%" fxFlex.sm="50" fxFlex.xs="100%">
+                                <mat-form-field fxFlex="20%" fxFlex.sm="50%" fxFlex.xs="100%">
                                     <mat-label>Ocupacion del Acudiente</mat-label>
                                     <input matInput formControlName="ocupacion" placeholder="Ocupacion del Acudiente">
                                 </mat-form-field>
-                                <mat-form-field fxFlex="20%" fxFlex.sm="33" fxFlex.xs="100%">
+                                <mat-form-field fxFlex="20%" fxFlex.sm="33%" fxFlex.xs="100%">
                                     <mat-label>Lugar de trabajo del Acudiente</mat-label>
                                     <input matInput formControlName="lugarTrabajo" placeholder="Lugar de trabajo del Acudiente">
                                 </mat-form-field>
-                                <mat-form-field fxFlex="20%" fxFlex.sm="33" fxFlex.xs="100%">
-                                    <mat-label>Edad del Acudiente</mat-label>
-                                    <input matInput formControlName="edad" placeholder="Edad del Acudiente">
-                                </mat-form-field>
-                                <mat-form-field fxFlex="20%" fxFlex.sm="33" fxFlex.xs="100%">
+                                <mat-form-field fxFlex="20%" fxFlex.sm="33%" fxFlex.xs="100%">
                                     <mat-label>Parentesco del Acudiente</mat-label>
                                     <input matInput formControlName="parentesco" placeholder="Parentesco del Acudiente">
+                                </mat-form-field>
+                                <mat-form-field fxFlex="5%" fxFlex.sm="33%" fxFlex.xs="100%">
+                                    <mat-label>Edad</mat-label>
+                                    <input matInput formControlName="edad" placeholder="Edad del Acudiente">
+                                </mat-form-field>
+                                <mat-form-field fxFlex="15%" fxFlex.sm="33%" fxFlex.xs="100%">
+                                    <mat-label>Telefono</mat-label>
+                                    <input matInput formControlName="telefono" placeholder="telefono">
                                 </mat-form-field>
                             </mat-card-content>
                         </mat-card>
@@ -429,33 +433,143 @@
                         </mat-panel-description>
                       </mat-expansion-panel-header>
                       <div fxLayout fxLayout="row wrap" fxLayoutGap="20px grid" formGroupName="seguimientoComportamental">
-                        <p fxFlex="33%" fxFlex.xs="100%">
-                            <mat-checkbox formControlName="tratoAfectuoso">Mantiene un trato afectuoso,  respetuoso  y armonioso hacia los  compañeros(as) y docentes</mat-checkbox>
-                        </p>
-                        <p fxFlex="33%" fxFlex.xs="100%">
-                            <mat-checkbox formControlName="puntualidad">Llega puntualmente al colegio, a clases y demás actividades.</mat-checkbox>
-                        </p>
-                        <p fxFlex="33%" fxFlex.xs="100%">
-                            <mat-checkbox formControlName="participacion">Está atento en clases, escucha y participa de manera apropiada teniendo en cuenta las necesidades  de  los demás compañeros y compañeras.</mat-checkbox>
-                        </p>
-                        <p fxFlex="33%" fxFlex.xs="100%">
-                            <mat-checkbox formControlName="asertividad">Cuando tiene dificultades acude ante sus docentes para buscar encontrar soluciones asertivas a sus problemas.</mat-checkbox>
-                        </p>
-                        <p fxFlex="33%" fxFlex.xs="100%">
-                            <mat-checkbox formControlName="tolerancia">Responde con conductas apropiadas ante situaciones conflictivas.</mat-checkbox>
-                        </p>
-                        <p fxFlex="33%" fxFlex.xs="100%">
-                            <mat-checkbox formControlName="presentacionPersonal">Su presentación personal es adecuada a las peticiones y necesidades de la comunidad educativa.</mat-checkbox>
-                        </p>
-                        <p fxFlex="33%" fxFlex.xs="100%">
-                            <mat-checkbox formControlName="respeto">Sigue y acata con respeto las indicaciones, orientaciones de los docentes y directivos del colegio</mat-checkbox>
-                        </p>
-                        <p fxFlex="33%" fxFlex.xs="100%">
-                            <mat-checkbox formControlName="empatia">Canaliza su agresividad con conductas asertivas y dialogantes que conllevan a solucionar los  puntos de vistas diferentes.</mat-checkbox>
-                        </p>
-                        <p fxFlex="33%" fxFlex.xs="100%">
-                            <mat-checkbox formControlName="colaboracion">Cuida el entorno del colegio, los salones, los muebles y demás utensilios de la institución.</mat-checkbox>
-                        </p>
+                        <div fxFlex="100%" fxFlex.lg="50%">
+                            <div fxLayout="row" fxLayoutGap="5px" fxFlexAlign="center center">
+                                <p fxFlex="80%">
+                                    Mantiene un trato afectuoso,  respetuoso  y armonioso hacia los  compañeros(as) y docentes
+                                </p>
+                                <mat-form-field fxFlex="20%">
+                                    <mat-label>Seleccione una opcion</mat-label>
+                                    <mat-select formControlName="tratoAfectuoso">
+                                      <mat-option>Niguna</mat-option>
+                                      <mat-option value="Si">Si</mat-option>
+                                      <mat-option value="No">No</mat-option>
+                                      <mat-option value="Tal vez">Tal vez</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxFlex="100%" fxFlex.lg="50%">
+                            <div fxLayout="row" fxLayoutGap="5px" fxFlexAlign="center center">
+                                <p fxFlex="80%">
+                                    Llega puntualmente al colegio, a clases y demás actividades.
+                                </p>
+                                <mat-form-field fxFlex="20%">
+                                    <mat-label>Seleccione una opcion</mat-label>
+                                    <mat-select formControlName="puntualidad">
+                                      <mat-option>Niguna</mat-option>
+                                      <mat-option value="Si">Si</mat-option>
+                                      <mat-option value="No">No</mat-option>
+                                      <mat-option value="Tal vez">Tal vez</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxFlex="100%" fxFlex.lg="50%">
+                            <div fxLayout="row" fxLayoutGap="5px" fxFlexAlign="center center">
+                                <p fxFlex="80%">Está atento en clases, escucha y participa de manera apropiada teniendo en cuenta las necesidades  de  los demás compañeros y compañeras.
+                                </p>
+                                <mat-form-field fxFlex="20%">
+                                    <mat-label>Seleccione una opcion</mat-label>
+                                    <mat-select formControlName="participacion">
+                                      <mat-option>Niguna</mat-option>
+                                      <mat-option value="Si">Si</mat-option>
+                                      <mat-option value="No">No</mat-option>
+                                      <mat-option value="Tal vez">Tal vez</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxFlex="100%" fxFlex.lg="50%">
+                            <div fxLayout="row" fxLayoutGap="5px" fxFlexAlign="center center">
+                                <p fxFlex="80%">Cuando tiene dificultades acude ante sus docentes para buscar encontrar soluciones asertivas a sus problemas.
+                                </p>
+                                <mat-form-field fxFlex="20%">
+                                    <mat-label>Seleccione una opcion</mat-label>
+                                    <mat-select formControlName="asertividad">
+                                      <mat-option>Niguna</mat-option>
+                                      <mat-option value="Si">Si</mat-option>
+                                      <mat-option value="No">No</mat-option>
+                                      <mat-option value="Tal vez">Tal vez</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxFlex="100%" fxFlex.lg="50%">
+                            <div fxLayout="row" fxLayoutGap="5px" fxFlexAlign="center center">
+                                <p fxFlex="80%">Responde con conductas apropiadas ante situaciones conflictivas.
+                                </p>
+                                <mat-form-field fxFlex="20%">
+                                    <mat-label>Seleccione una opcion</mat-label>
+                                    <mat-select formControlName="tolerancia">
+                                      <mat-option>Niguna</mat-option>
+                                      <mat-option value="Si">Si</mat-option>
+                                      <mat-option value="No">No</mat-option>
+                                      <mat-option value="Tal vez">Tal vez</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxFlex="100%" fxFlex.lg="50%">
+                            <div fxLayout="row" fxLayoutGap="5px" fxFlexAlign="center center">
+                                <p fxFlex="80%">Su presentación personal es adecuada a las peticiones y necesidades de la comunidad educativa.
+                                </p>
+                                <mat-form-field fxFlex="20%">
+                                    <mat-label>Seleccione una opcion</mat-label>
+                                    <mat-select formControlName="presentacionPersonal">
+                                      <mat-option>Niguna</mat-option>
+                                      <mat-option value="Si">Si</mat-option>
+                                      <mat-option value="No">No</mat-option>
+                                      <mat-option value="Tal vez">Tal vez</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxFlex="100%" fxFlex.lg="50%">
+                            <div fxLayout="row" fxLayoutGap="5px" fxFlexAlign="center center">
+                                <p fxFlex="80%">Sigue y acata con respeto las indicaciones, orientaciones de los docentes y directivos del colegio.
+                                </p>
+                                <mat-form-field fxFlex="20%">
+                                    <mat-label>Seleccione una opcion</mat-label>
+                                    <mat-select formControlName="respeto">
+                                      <mat-option>Niguna</mat-option>
+                                      <mat-option value="Si">Si</mat-option>
+                                      <mat-option value="No">No</mat-option>
+                                      <mat-option value="Tal vez">Tal vez</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxFlex="100%" fxFlex.lg="50%">
+                            <div fxLayout="row" fxLayoutGap="5px" fxFlexAlign="center center">
+                                <p fxFlex="80%">Canaliza su agresividad con conductas asertivas y dialogantes que conllevan a solucionar los  puntos de vistas diferentes.
+                                </p>
+                                <mat-form-field fxFlex="20%">
+                                    <mat-label>Seleccione una opcion</mat-label>
+                                    <mat-select formControlName="empatia">
+                                      <mat-option>Niguna</mat-option>
+                                      <mat-option value="Si">Si</mat-option>
+                                      <mat-option value="No">No</mat-option>
+                                      <mat-option value="Tal vez">Tal vez</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxFlex="100%" fxFlex.lg="50%">
+                            <div fxLayout="row" fxLayoutGap="5px" fxFlexAlign="center center">
+                                <p fxFlex="80%">Cuida el entorno del colegio, los salones, los muebles y demás utensilios de la institución.
+                                </p>
+                                <mat-form-field fxFlex="20%">
+                                    <mat-label>Seleccione una opcion</mat-label>
+                                    <mat-select formControlName="colaboracion">
+                                      <mat-option>Niguna</mat-option>
+                                      <mat-option value="Si">Si</mat-option>
+                                      <mat-option value="No">No</mat-option>
+                                      <mat-option value="Tal vez">Tal vez</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
                         <mat-form-field fxFlex="100%" fxFlex.xs="100%">
                             <mat-label>Problemas Resueltos</mat-label>
                             <input matInput formControlName="problemasResueltos" placeholder="Problemas Resueltos">

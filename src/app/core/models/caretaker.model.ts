@@ -4,4 +4,5 @@ export interface Caretaker  {
     lugarTrabajo: string;
     edad: string;
     parentesco: string;
+    telefono: string;
   }

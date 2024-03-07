@@ -1,4 +1,4 @@
-import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
+import { AsyncPipe, CommonModule, DatePipe, UpperCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { StudentRecord } from '../../core/models/student-record.model';
@@ -25,6 +25,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     AsyncPipe,
     DatePipe,
     RouterLink,
+    UpperCasePipe,
   ],
   templateUrl: './attention-tracking-list.component.html',
   styleUrl: './attention-tracking-list.component.css',
