@@ -37,11 +37,11 @@ export const routes: Routes = [
             }
         ]
     },
-    {
-        path: 'import-data',
-        canActivate: [authGuard],
-        loadComponent: () => import('./import-data/import-data.component').then(m => m.ImportDataComponent)
-    },
+    // {
+    //     path: 'import-data',
+    //     canActivate: [authGuard],
+    //     loadComponent: () => import('./import-data/import-data.component').then(m => m.ImportDataComponent)
+    // },
     {
         path: '**',
         redirectTo: ''

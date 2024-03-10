@@ -8,6 +8,7 @@ import { PersonalityTraits } from "./personality-traits.model";
 
 export interface StudentRecord extends StudentRecordForm {
   id: string;
+  trackingCounter?: number;
 }
 
 export interface StudentRecordForm {

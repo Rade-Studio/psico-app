@@ -1,20 +1,28 @@
 <div class="content">
     <div fxLayout="row wrap" fxLayoutGap="10px grid">
-        <div fxFlex="50%" 
+        <div fxFlex="33%" 
         fxFlex.xs="100%"
         fxFlex.sm="50%" 
         *ngFor="let record of attentionTracking$ | async">
-            <mat-card class="student-card mat-elevation-z4" color="primary" style="margin-top: 30px;">
-                <mat-card-header>
+            <mat-card class="student-card mat-elevation-z5" style="margin-top: 30px;">
+                <mat-card-header >
                     <mat-card-title>{{ record.nombres | uppercase }}</mat-card-title>
-                    <mat-card-subtitle>{{ record.grado | uppercase }}</mat-card-subtitle>
+                    <mat-card-subtitle style="margin: 5px;">
+                        <mat-chip-option selected color="primary">{{ record.grado | uppercase }}</mat-chip-option>
+                    </mat-card-subtitle>
                 </mat-card-header>
-                <mat-card-content>
-                    <p><b>Edad:</b> {{ record.edad }} años</p>
-                    <p><b>Dirección:</b> {{ record.direccionResidencia | uppercase }}</p>
+                <mat-card-content class="flex-row">
+                    <div class="age">
+                        <span class="big-text">Teléfono Acudiente</span>
+                        <span>{{record.acudiente.telefono}}</span>
+                    </div>
+                    <div class="address">
+                        <span class="big-text">Dirección Residencia</span>
+                        <span>{{record.direccionResidencia | uppercase}}</span>
+                    </div>
                     <!-- Ultima Cita: <p>{{ record.fechaActualizacion | date:'dd/MM/yyyy' }}</p> -->
                 </mat-card-content>
-                <mat-card-actions align="end">
+                <mat-card-actions fxLayout="row" fxFlexAlign="center">
                     <button mat-icon-button color="primary" [routerLink]="['attention-tracking/edit/', record.id]">
                         <mat-icon>edit</mat-icon>
                     </button>

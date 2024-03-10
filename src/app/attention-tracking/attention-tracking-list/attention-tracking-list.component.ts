@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatChipsModule} from '@angular/material/chips';
 
 @Component({
   selector: 'attention-tracking-list',
@@ -26,6 +27,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     DatePipe,
     RouterLink,
     UpperCasePipe,
+    MatChipsModule,
   ],
   templateUrl: './attention-tracking-list.component.html',
   styleUrl: './attention-tracking-list.component.css',
